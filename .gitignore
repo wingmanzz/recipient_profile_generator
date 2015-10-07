@@ -2,6 +2,7 @@ env
 *.html
 charts
 donors/*
+recipients/*
 node_modules/*
 graphics
 charts

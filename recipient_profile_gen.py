@@ -32,8 +32,8 @@ def drawMultiString( c, x, y, s ):
 
 ################################
 # Function HeaderOverview - header for overview page
-def drawHeader(canvas, donor):
-    donor_name = donor.replace('_', ' ')
+def drawHeader(canvas, recipient):
+    recipient_name = recipient.replace('_', ' ')
 
     canvas.saveState()
     headboxh = 80
@@ -47,12 +47,12 @@ def drawHeader(canvas, donor):
 
     # aiddata logo
     logouri = "assets/images/aiddata_main_wht.png"
-    mapuri = "donors/" + donor + "/map.png"
-    influenceuri = "donors/" + donor + "/influence.png"
-    adviceuri = "donors/" + donor + "/advice.png"
+    mapuri = "recipients/" + recipient + "/map.png"
+    influenceuri = "recipients/" + recipient + "/influence.png"
+    adviceuri = "recipients/" + recipient + "/advice.png"
     advicelegenduri = "assets/images/bubble_legend.png"
-    compuri = "donors/" + donor + "/comp.png"
-    comp2uri = "donors/" + donor + "/comp2.png"
+    compuri = "recipients/" + recipient + "/comp.png"
+    comp2uri = "recipients/" + recipient + "/comp2.png"
 
     # blue header
     canvas.setFillColorRGB(.086, .121, .203)
@@ -60,7 +60,7 @@ def drawHeader(canvas, donor):
     canvas.saveState()
     canvas.setFillColor(colors.white)
     canvas.setFont('Open Sans', 20)
-    canvas.drawString(headboxx + 160, headboxy + .425 * headboxh, "Development Partner Profile")
+    canvas.drawString(headboxx + 160, headboxy + .425 * headboxh, "Partner Country Profile")
 
     # green header
     headboxh = 30
@@ -72,9 +72,9 @@ def drawHeader(canvas, donor):
     canvas.saveState()
     canvas.setFillColor(colors.white)
     canvas.setFont('Open Sans', 18)
-    donor_year = donor_name + " 2015"
-    textWidth = stringWidth(donor_year, "Open Sans", 18)
-    canvas.drawString(headboxx + headboxw - (textWidth + 10), headboxy + .30 * headboxh, donor_name + " 2015")
+    recipient_year = recipient_name + " 2015"
+    textWidth = stringWidth(recipient_year, "Open Sans", 18)
+    canvas.drawString(headboxx + headboxw - (textWidth + 10), headboxy + .30 * headboxh, recipient_name + " 2015")
 
     # add logo
     logo = ImageReader(logouri)
@@ -84,7 +84,7 @@ def drawHeader(canvas, donor):
     # add map
     canvas.setFont('Open Sans', 12)
     canvas.setFillColor(colors.black)
-    title_str = "Distribution of " + donor_name + "'s"
+    title_str = "Distribution of " + recipient_name + "'s"
     textWidth = stringWidth(title_str, "Open Sans", 12)
     pl = (PAGEWIDTH / 2) - (textWidth / 2)
     canvas.drawString(pl, 650, title_str)
@@ -98,7 +98,7 @@ def drawHeader(canvas, donor):
     # add influence chart
     canvas.setFont('Open Sans', 12)
     canvas.setFillColor(colors.black)
-    title_str = "Three Aspects of " + donor_name + "'s Performance in the Countries It Influences Most"
+    title_str = "Three Aspects of " + recipient_name + "'s Performance in the Countries It Influences Most"
     textWidth = stringWidth(title_str, "Open Sans", 12)
     pl = (PAGEWIDTH / 2) - (textWidth / 2)
     canvas.drawString(pl, 310, title_str)
@@ -123,14 +123,14 @@ def drawHeader(canvas, donor):
     # add advice comp chart
     canvas.setFont('Open Sans', 12)
     canvas.setFillColor(colors.black)
-    title_str = "Usefulness of " + donor_name + "'s Advice Compared to the Average"
+    title_str = "Usefulness of " + recipient_name + "'s Advice Compared to the Average"
     textWidth = stringWidth(title_str, "Open Sans", 12)
     pl = (PAGEWIDTH / 3) - (textWidth / 2)
     canvas.drawString(pl, 500, title_str)
     canvas.setFont('Open Sans', 6)
     key_str1 = "All Other Development Partners"
     canvas.drawString(pl+60,487, key_str1)
-    canvas.drawString(pl+210,487, donor_name)
+    canvas.drawString(pl+210,487, recipient_name)
     canvas.setStrokeColorRGB(.461, .711, .340)
     canvas.line(pl+30, 489, pl+50, 489)
     canvas.setStrokeColorRGB(.890, .118, .118)
@@ -142,14 +142,14 @@ def drawHeader(canvas, donor):
 
     canvas.setFont('Open Sans', 12)
     canvas.setFillColor(colors.black)
-    title_str = donor_name+ "'s Influence in Designing\nReforms for Different Problem Types"
+    title_str = recipient_name+ "'s Influence in Designing\nReforms for Different Problem Types"
     pl = 400
     canvas = drawMultiString(canvas, pl, 500, title_str)
 
     # add comp2 chart
     canvas.setFont('Open Sans', 12)
     canvas.setFillColor(colors.black)
-    title_str = "Three Dimensions of  " + donor_name + "'s Performance Compared to Other Development Partners"
+    title_str = "Three Dimensions of  " + recipient_name + "'s Performance Compared to Other Development Partners"
     textWidth = stringWidth(title_str, "Open Sans", 12)
     pl = (PAGEWIDTH / 2) - (textWidth / 2)
     canvas.drawString(pl, 250, title_str)
@@ -171,19 +171,19 @@ def drawHeader(canvas, donor):
     return canvas
 
 
-donor_dirs = get_immediate_subdirectories("donors")
+recipient_dirs = get_immediate_subdirectories("recipients")
 
-def writePdf(donor):
-    c = canvas.Canvas("donors/" + donor + "/donor_profile.pdf", pagesize=letter)
+def writePdf(recipient):
+    c = canvas.Canvas("recipients/" + recipient + "/recipient_profile.pdf", pagesize=letter)
     c.setLineWidth(.3)
     c.setFont('Open Sans', 12)
 
-    c = drawHeader(c, donor)
+    c = drawHeader(c, recipient)
 
     c.save()
 
 jobs = []
-for donor in donor_dirs:
-    p = Process(target=writePdf, args=(donor,))
+for recipient in recipient_dirs:
+    p = Process(target=writePdf, args=(recipient,))
     jobs.append(p)
     p.start()

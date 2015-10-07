@@ -1,1 +1,10 @@
-# recipient_profile_generator
+#Recipient Profile Generator
+
+### Dependencies
+??
+### Running
+
+```sh
+./make.sh
+./run.sh
+```

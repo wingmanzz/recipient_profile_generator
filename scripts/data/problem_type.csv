@@ -1,0 +1,17 @@
+Code,ProblemTypeLong,ProblemTypeShort
+PT1,Poor delivery of public services,Service Delivery
+PT2,"Inadequate, inconsistent, or unstable regulations, laws, or policies",De Jure Environment
+PT3,Inadequate or inconsistent implementation or enforcement,Implementation
+PT4,Inadequate data collection or information systems,Information
+PT5,"Fraud, corruption, opacity, cronyism, or political interference",Corruption
+PT6,Disconnect between formal policies and informal norms,Informality
+PT7,Insufficient funding,Funding
+PT8,Insufficient human capital,Human Capital
+PT9,"Insufficient equipment, technology, or infrastructure",Infrastructure
+PT10,Overly burdensome or inefficient bureaucracy,Bureaucracy
+PT11,Poor inter- or intra-institutional communication or coordination,Coordination
+PT12,"Inadequate management, strategic direction, focus, or political will",Leadership
+PT13,Decision-making that is overly centralized,Vested Interests
+PT14,Inadequate involvement of local stakeholders in decision-making,Consultation
+PT15,"Insufficient safety and security due to conflict, terrorism, or political instability",Physical Security
+PT16,Behavior or incentives of private individuals or firms needs to change,Incentives

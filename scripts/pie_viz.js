@@ -2,40 +2,58 @@ var fs = require('fs');
 var path = require('path');
 var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
+var fetchRecipients = require('./fetch_recipients');
+var Promise = require('promise');
 
-writeChartsToDisk();
+fetchRecipients()
+  .then(generateRandomPieData)
+  .then(writeChartsToDisk);
 
-function generateRandomPieData() {
-  return [ 1, 2, 3, 4, 5, 6 ].map(function() {
-    var donor = '';
-    var j = 7;
-    while (j--) {
-      donor += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-        .charAt(Math.floor(Math.random() * 51));
-    }
-    return {
-      donor: donor,
-      amount: Math.random()
-    };
+function generateRandomPieData(donors) {
+  return new Promise(function(resolve) {
+    resolve(donors.map(function(d) {
+      function getData() {
+        return [ 1, 2, 3, 4, 5, 6 ].map(function(i) {
+          return {
+            donor: d.name + i,
+            amount: Math.random()
+          };
+        });
+      }
+      return {
+        recipient: d.name,
+        donors: {
+          dac: getData(),
+          multi: getData(),
+          nondac: getData()
+        }
+      };
+    }));
   });
 }
 
-function writeChartsToDisk(data, i) {
-  if (!i) i = 0;
-  data = [ 1, 2, 3, 4, 5, 6 ].map(generateRandomPieData);
+function writeChartsToDisk(data) {
+  for (var i = 0; i < data.length; i++) {
+    for (var key in data[i].donors) {
+      writeChart(name, data[i].donors[key]);
+    }
+  }
+}
+
+function writeChart(name, data) {
+  console.log(data);
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
     scripts: [ 'http://d3js.org/d3.v3.min.js' ],
     done: function(err, window) {
       if (err) return;
-      var svg = getChart(window, data[i]);
+      var svg = getChart(window, data);
       fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'pie_chart_' + data[i].donor + '.svg'),
+        path.join(__dirname, '..', 'graphics', 'pie_chart_' + data[0].donors[key].donor + '.svg'),
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );
-      if (++i < data.length) writeChartsToDisk(data, i);
     }
   });
 }
@@ -78,7 +96,11 @@ function getChart(window, data) {
     .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
     .attr('dy', '.35em')
     .style('text-anchor', 'middle')
-    .text(function(d) { console.log(d); return d.data.donor; });
+    .text(function(d) { return d.data.donor; });
+
+  svg.selectAll('text')
+    .style('font-family', 'Open Sans, sans-serif')
+    .style('color', '#fff');
 
   return window.document.getElementsByTagName('svg')[0];
 }

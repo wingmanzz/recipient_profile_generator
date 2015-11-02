@@ -1,189 +1,73 @@
-import os
-
-from multiprocessing import Process
 from reportlab.pdfgen import canvas
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
-from reportlab.lib import colors
-from reportlab.pdfbase.pdfmetrics import stringWidth
-from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import letter
-
-PAGEWIDTH, PAGEHEIGHT = letter
+from reportlab.lib import colors
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.utils import ImageReader
 
 # register Open Sans
 pdfmetrics.registerFont(TTFont('Open Sans', 'assets/fonts/fonts-open-sans/OpenSans-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Open Sans Bold', 'assets/fonts/fonts-open-sans/OpenSans-Bold.ttf'))
 
+class RecipientProfile():
 
-# get the immediate directories of a directory
-def get_immediate_subdirectories(a_dir):
-    return [name for name in os.listdir(a_dir)
-            if os.path.isdir(os.path.join(a_dir, name))]
+    def __init__(self, rec):
+        self.rec = rec
+        self.c = canvas.Canvas(rec + '.pdf')
+        self.PAGEWIDTH, self.PAGEHEIGHT = letter
+        self.template().add_charts()
 
+    def template():
+        self.draw_header().draw_footer()
+        return self
 
-# draw a multiline string
-def drawMultiString( c, x, y, s ):
-    for ln in s.split('\n'):
-        c.drawString( x, y, ln )
-        y -= c._leading
-    return c
+    def draw_header():
+        headboxh = 80
+        headboxx = 20
+        headboxy = 695
+        headboxw = 570
 
+        # blue header
+        self.c.setFillColorRGB(.086, .121, .203)
+        self.c.rect(headboxx, headboxy, headboxw, headboxh, fill=1)
+        self.c.saveState()
+        self.c.setFillColor(colors.white)
+        self.c.setFont('Open Sans', 20)
+        self.c.drawString(headboxx + 160, headboxy + .425 * headboxh, 'Recipient Profile')
+        return self
 
-################################
-# Function HeaderOverview - header for overview page
-def drawHeader(canvas, recipient):
-    recipient_name = recipient.replace('_', ' ')
+    def draw_footer():
+        logouri = 'assets/images/aiddata_main_wht.png'
+        logo = ImageReader(logouri)
+        self.c.drawImage(logo, 475, 18, 120, 68, preserveAspectRatio=True, mask='auto')
+        return self
 
-    canvas.saveState()
-    headboxh = 80
-    headboxx = 20
-    headboxy = 695
-    headboxw = 570
-    footboxh = 65
-    footboxx = 20
-    footboxy = 20
-    footboxw = 570
+    def add_charts():
+        self.draw_dac()
+        self.draw_nondac()
+        self.draw_multi()
+        return self
 
-    # aiddata logo
-    logouri = "assets/images/aiddata_main_wht.png"
-    mapuri = "recipients/" + recipient + "/map.png"
-    influenceuri = "recipients/" + recipient + "/influence.png"
-    adviceuri = "recipients/" + recipient + "/advice.png"
-    advicelegenduri = "assets/images/bubble_legend.png"
-    compuri = "recipients/" + recipient + "/comp.png"
-    comp2uri = "recipients/" + recipient + "/comp2.png"
+    def draw_dac():
+        chart = 'charts/pie_chart_' + self.rec + '_dac.png'
+        self.c.drawImage(chart, 100, 100, 150, 200, mask='auto')
+        return self
 
-    # blue header
-    canvas.setFillColorRGB(.086, .121, .203)
-    canvas.rect(headboxx, headboxy, headboxw, headboxh, fill=1)
-    canvas.saveState()
-    canvas.setFillColor(colors.white)
-    canvas.setFont('Open Sans', 20)
-    canvas.drawString(headboxx + 160, headboxy + .425 * headboxh, "Partner Country Profile")
+    def draw_nondac():
+        chart = 'charts/pie_chart_' + self.rec + '_nondac.png'
+        self.c.drawImage(chart, 200, 200, 150, 200, mask='auto')
+        return self
 
-    # green header
-    headboxh = 30
-    headboxx = 20
-    headboxy = 665
-    headboxw = 570
-    canvas.setFillColorRGB(.461, .711, .340)
-    canvas.rect(headboxx, headboxy, headboxw, headboxh, fill=1)
-    canvas.saveState()
-    canvas.setFillColor(colors.white)
-    canvas.setFont('Open Sans', 18)
-    recipient_year = recipient_name + " 2015"
-    textWidth = stringWidth(recipient_year, "Open Sans", 18)
-    canvas.drawString(headboxx + headboxw - (textWidth + 10), headboxy + .30 * headboxh, recipient_name + " 2015")
+    def draw_multi():
+        chart = 'charts/pie_chart_' + self.rec + '_multi.png'
+        self.c.drawImage(chart, 300, 300, 150, 200, mask='auto')
+        return self
 
-    # add logo
-    logo = ImageReader(logouri)
-    canvas.drawImage(logo, 30, 700, 120, 68, mask='auto')
+    def save():
+        this.c.save()
+        return self
 
-
-    # add map
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Distribution of " + recipient_name + "'s"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 650, title_str)
-    title_str = "Official Development Assistance(ODA) 2004-2013"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 638, title_str)
-    map = ImageReader(mapuri)
-    canvas.drawImage(map, 75, 305, 450, 350, mask='auto')
-
-    # add influence chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Three Aspects of " + recipient_name + "'s Performance in the Countries It Influences Most"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 310, title_str)
-    influence = ImageReader(influenceuri)
-    canvas.drawImage(influence, 80, 20, 450, 275, mask='auto')
-
-    # move to next page
-    canvas.showPage()
-
-    # add advice chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Usefulness of Advice, Volume of ODA and Agenda-Setting Influence, by Policy Area"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 750, title_str)
-    advice = ImageReader(adviceuri)
-    canvas.drawImage(advice, 75, 530, 350, 200, mask='auto')
-    advicelegend = ImageReader(advicelegenduri)
-    canvas.drawImage(advicelegend, 450, 545,150,200, mask='auto')
-
-    # add advice comp chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Usefulness of " + recipient_name + "'s Advice Compared to the Average"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 3) - (textWidth / 2)
-    canvas.drawString(pl, 500, title_str)
-    canvas.setFont('Open Sans', 6)
-    key_str1 = "All Other Development Partners"
-    canvas.drawString(pl+60,487, key_str1)
-    canvas.drawString(pl+210,487, recipient_name)
-    canvas.setStrokeColorRGB(.461, .711, .340)
-    canvas.line(pl+30, 489, pl+50, 489)
-    canvas.setStrokeColorRGB(.890, .118, .118)
-    canvas.line(pl+180, 489, pl+200, 489)
-    comp = ImageReader(compuri)
-    canvas.drawImage(comp, 45, 280, 225, 200, mask='auto')
-
-    # add design reforms list
-
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = recipient_name+ "'s Influence in Designing\nReforms for Different Problem Types"
-    pl = 400
-    canvas = drawMultiString(canvas, pl, 500, title_str)
-
-    # add comp2 chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Three Dimensions of  " + recipient_name + "'s Performance Compared to Other Development Partners"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 250, title_str)
-    comp2 = ImageReader(comp2uri)
-    canvas.drawImage(comp2, 45, 110, 525, 125, mask='auto')
-
-
-    # blue footer
-    canvas.setStrokeColorRGB(.086, .121, .203)
-    canvas.setFillColorRGB(.086, .121, .203)
-    canvas.rect(footboxx, footboxy, footboxw, footboxh, fill=1)
-    canvas.saveState()
-    canvas.setFillColor(colors.white)
-
-    # add logo
-    logo = ImageReader(logouri)
-    canvas.drawImage(logo, 475, 20, 105, 65, mask='auto')
-
-    return canvas
-
-
-recipient_dirs = get_immediate_subdirectories("recipients")
-
-def writePdf(recipient):
-    c = canvas.Canvas("recipients/" + recipient + "/recipient_profile.pdf", pagesize=letter)
-    c.setLineWidth(.3)
-    c.setFont('Open Sans', 12)
-
-    c = drawHeader(c, recipient)
-
-    c.save()
-
-jobs = []
-for recipient in recipient_dirs:
-    p = Process(target=writePdf, args=(recipient,))
-    jobs.append(p)
-    p.start()
+if __name__ == '__main__':
+    for rec in ['Afghanistan']:
+        p = RecipientProfile(rec)
+        p.save()

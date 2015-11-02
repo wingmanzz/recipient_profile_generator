@@ -15,7 +15,7 @@ function generateRandomPieData(donors) {
       function getData() {
         return [ 1, 2, 3, 4, 5, 6 ].map(function(i) {
           return {
-            donor: d.name + i,
+            donor: d.name + ' donor ' + i,
             amount: Math.random()
           };
         });
@@ -32,28 +32,39 @@ function generateRandomPieData(donors) {
   });
 }
 
-function writeChartsToDisk(data) {
-  for (var i = 0; i < data.length; i++) {
-    for (var key in data[i].donors) {
-      writeChart(name, data[i].donors[key]);
+var pairs = [];
+var allData;
+function writeChartsToDisk(d) {
+  allData = d;
+  for (var i = 0; i < allData.length; i++) {
+    for (var key in allData[i].donors) {
+      pairs.push({
+        idx: i,
+        recipient: allData[i].recipient,
+        group: key
+      });
     }
   }
+  writeChart();
 }
 
-function writeChart(name, data) {
-  console.log(data);
+function writeChart(i) {
+  if (!i) i = 0;
+  var p = pairs[i];
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
     scripts: [ 'http://d3js.org/d3.v3.min.js' ],
     done: function(err, window) {
       if (err) return;
-      var svg = getChart(window, data);
+      var svg = getChart(window, allData[p.idx].donors[p.group]);
       fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'pie_chart_' + data[0].donors[key].donor + '.svg'),
+        path.join(__dirname, '..', 'graphics', 'pie_chart_' + p.recipient + '_' + p.group + '.svg'),
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );
+      console.log(i);
+      if (i < pairs.length) writeChart(++i);
     }
   });
 }

@@ -17,7 +17,14 @@ class RecipientProfile:
         self.rec = rec
         self.c = canvas.Canvas(rec + '.pdf')
         self.PAGEWIDTH, self.PAGEHEIGHT = letter
-        self.chart = { 'pie_width': 300, 'pie_height': 170 }
+        self.chart = {}
+        self.chart['pie_width'] = 170
+        self.chart['pie_height'] = 170
+        self.chart['pie_title_y_offset'] = 170
+        self.chart['pie_title_x_offset'] = 40
+
+        self.debug = True
+
         self.template().add_charts()
 
     def template(self):
@@ -63,20 +70,20 @@ class RecipientProfile:
         x_offset = 40
         y_offset = 350
 
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 100, 100)
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 100, 100)
 
     def draw_dac(self):
         # location
         x_offset = 50
         y_offset = 490
-        title_x = x_offset
-        title_y = y_offset
+        title_x = x_offset + self.chart['pie_title_x_offset']
+        title_y = y_offset + self.chart['pie_title_y_offset']
         chart_x = x_offset
         chart_y = y_offset
 
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 200, 200)
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 200)
 
         # draw title
         title = 'Top 5 DAC Development Partners'
@@ -93,30 +100,35 @@ class RecipientProfile:
         # location
         x_offset = 350
         y_offset = 490
-        title_x = x_offset
-        title_y = y_offset
+        title_x = x_offset + self.chart['pie_title_x_offset']
+        title_y = y_offset + self.chart['pie_title_y_offset']
         chart_x = x_offset
         chart_y = y_offset
 
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 200, 200)
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 200)
 
+        # draw title
         title = 'Top 5 NonDAC Development Partners'
+        p = Paragraph(title, getSampleStyleSheet()['Normal'])
+        p.wrapOn(self.c, 100, 100)
+        p.drawOn(self.c, title_x, title_y)
+
         chart = 'charts/pie_chart_' + self.rec + '_nondac.png'
-        #self.c.drawImage(chart, chart_x, chart_y, 400, 200, mask='auto')
+        self.c.drawImage(chart, chart_x, chart_y, self.chart['pie_width'], self.chart['pie_height'], mask='auto')
         return self
 
     def draw_multi(self):
         # location
         x_offset = self.PAGEWIDTH / 2 - 100
         y_offset = 350
-        title_x = x_offset
-        title_y = y_offset
+        title_x = x_offset + self.chart['pie_title_x_offset']
+        title_y = y_offset + self.chart['pie_title_y_offset']
         chart_x = x_offset
         chart_y = y_offset
 
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 200, 200)
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 200)
 
         # draw title
         title = 'Top 5 MultiLateral Development Partners'
@@ -138,8 +150,9 @@ class RecipientProfile:
         chart_x = x_offset
         chart_y = y_offset
 
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, width, height)
+        if self.debug:
+            self.c.rect(x_offset, y_offset, width, height)
+
         return self
 
     def draw_agenda(self):
@@ -148,22 +161,27 @@ class RecipientProfile:
         x_offset = self.PAGEWIDTH /2 - 100
         y_offset = 600
 
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 200, 160)
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 160)
+
         return self
 
     def draw_usefulness(self):
         x_offset = 100
         y_offset = 400
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 200, 160)
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 160)
+
         return self
 
     def draw_helpfulness(self):
         x_offset = 300
         y_offset = 400
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, 200, 160)
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 160)
+
         return self
 
     def draw_avg_influence(self):
@@ -171,8 +189,10 @@ class RecipientProfile:
         width = self.PAGEWIDTH - border_x * 2
         x_offset = border_x
         y_offset = 20
-        # DEBUGGER
-        self.c.rect(x_offset, y_offset, width, 330)
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, width, 330)
+
         return self
 
     def draw_footer(self):

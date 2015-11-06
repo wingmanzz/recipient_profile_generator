@@ -68,7 +68,7 @@ function writeChart(i) {
       if (err) return;
       var svg = getChart(window, allData[p.idx].donors[p.group]);
       fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'pie_chart_' + p.recipient.replace(' ', '_') + '_' + p.group + '.svg'),
+        path.join(__dirname, '..', 'graphics', 'pie_chart_' + p.recipient.replace(/ /g, '_') + '_' + p.group + '.svg'),
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );

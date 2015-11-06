@@ -120,7 +120,7 @@ function getChart(window, data) {
 
   svg.selectAll('text')
     .style('font-family', 'Open Sans, sans-serif')
-    .style('color', '#fff');
+    .style('fill', '#fff');
 
   return window.document.getElementsByTagName('svg')[0];
 }

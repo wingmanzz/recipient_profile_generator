@@ -54,6 +54,7 @@ class RecipientProfile:
 
 
     def add_charts(self):
+        self.draw_title()
         self.draw_pie_legend()
         self.draw_dac()
         self.draw_nondac()
@@ -64,6 +65,24 @@ class RecipientProfile:
         self.draw_helpfulness()
         self.draw_avg_influence()
         self.draw_footer()
+
+        return self
+
+    def draw_title(self):
+        border = 20
+        x_offset = border
+        y_offset = 700
+        x = x_offset
+        y = y_offset
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, self.PAGEWIDTH - border * 2, 20)
+
+        title = self.rec.replace('_', ' ') + '\'s Top Development Partners, ODA 2004-2013 (Millions USD)'
+        p = Paragraph(title, getSampleStyleSheet()['Normal'])
+        p.wrapOn(self.c, self.PAGEWIDTH - border * 2, 100)
+        p.drawOn(self.c, x, y)
+
         return self
 
     def draw_pie_legend(self):
@@ -94,6 +113,7 @@ class RecipientProfile:
         # draw chart
         chart = 'charts/pie_chart_' + self.rec + '_dac.png'
         self.c.drawImage(chart, chart_x, chart_y, self.chart['pie_width'], self.chart['pie_height'], mask='auto')
+
         return self
 
     def draw_nondac(self):
@@ -116,6 +136,7 @@ class RecipientProfile:
 
         chart = 'charts/pie_chart_' + self.rec + '_nondac.png'
         self.c.drawImage(chart, chart_x, chart_y, self.chart['pie_width'], self.chart['pie_height'], mask='auto')
+
         return self
 
     def draw_multi(self):
@@ -208,10 +229,12 @@ class RecipientProfile:
         logo_x = x_offset + 450
         logo_y = y_offset
         self.c.drawImage(logo, logo_x, logo_y, 120, 68, preserveAspectRatio=True, mask='auto')
+
         return self
 
     def save(self):
         self.c.save()
+
         return self
 
 if __name__ == '__main__':

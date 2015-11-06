@@ -4,14 +4,18 @@ var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
 var fetchRecipients = require('./fetch_recipients');
 var Promise = require('promise');
+var ProgressBar = require('progress');
 
 fetchRecipients()
   .then(generateRandomPieData)
-  .then(writeChartsToDisk);
+  .then(writeChartsToDisk)
+  .catch(function(err) { console.log(err); });
 
-function generateRandomPieData(donors) {
+function generateRandomPieData(data) {
+  setBar(data.count);
+  var recipients = data.recipients;
   return new Promise(function(resolve) {
-    resolve(donors.map(function(d) {
+    resolve(recipients.map(function(d) {
       function getData() {
         return [ 1, 2, 3, 4, 5, 6 ].map(function(i) {
           return {
@@ -48,6 +52,11 @@ function writeChartsToDisk(d) {
   writeChart();
 }
 
+var bar;
+function setBar(total) {
+  bar = new ProgressBar('Progress [:bar] :percent', { total: total });
+}
+
 function writeChart(i) {
   if (!i) i = 0;
   var p = pairs[i];
@@ -59,11 +68,11 @@ function writeChart(i) {
       if (err) return;
       var svg = getChart(window, allData[p.idx].donors[p.group]);
       fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'pie_chart_' + p.recipient + '_' + p.group + '.svg'),
+        path.join(__dirname, '..', 'graphics', 'pie_chart_' + p.recipient.replace(' ', '_') + '_' + p.group + '.svg'),
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );
-      console.log(i);
+      bar.tick();
       if (i < pairs.length) writeChart(++i);
     }
   });
@@ -73,7 +82,7 @@ function getChart(window, data) {
   var d3 = window.d3;
   var PX_RATIO = 4 / 3;
 
-  var w = 900 * PX_RATIO,
+  var w = 500 * PX_RATIO,
       h = 500 * PX_RATIO,
       r = Math.min(w, h) / 2;
 

@@ -12,6 +12,7 @@
     "concat-stream": "^1.5.1",
     "csv-parse": "^1.0.0",
     "jsdom": "^3.1.2",
+    "progress": "^1.1.8",
     "promise": "^7.0.4",
     "ramda": "^0.17.1",
     "request": "^2.65.0",

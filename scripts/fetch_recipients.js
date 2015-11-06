@@ -23,7 +23,7 @@ function fetch(page, cb) {
         page++;
         fetch(page, cb);
       } else {
-        cb(recipients);
+        cb({ recipients: recipients, count: data.count });
       }
     }));
 }

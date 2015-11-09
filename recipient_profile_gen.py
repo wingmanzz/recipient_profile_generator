@@ -17,11 +17,15 @@ class RecipientProfile:
         self.rec = rec
         self.c = canvas.Canvas(rec + '.pdf')
         self.PAGEWIDTH, self.PAGEHEIGHT = letter
+
+        # chart size constants
         self.chart = {}
         self.chart['pie_width'] = 170
         self.chart['pie_height'] = 170
         self.chart['pie_title_y_offset'] = 170
         self.chart['pie_title_x_offset'] = 40
+        self.chart['bars_width'] = 200
+        self.chart['bars_height'] = 150
 
         self.debug = True
 
@@ -51,7 +55,6 @@ class RecipientProfile:
         self.c.rect(x_offset_green, y_offset_green, self.PAGEWIDTH, height_green, fill=1)
 
         return self
-
 
     def add_charts(self):
         self.draw_title()
@@ -112,7 +115,8 @@ class RecipientProfile:
 
         # draw chart
         chart = 'charts/pie_chart_' + self.rec + '_dac.png'
-        self.c.drawImage(chart, chart_x, chart_y, self.chart['pie_width'], self.chart['pie_height'], mask='auto')
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['pie_width'], self.chart['pie_height'], mask='auto')
 
         return self
 
@@ -135,7 +139,8 @@ class RecipientProfile:
         p.drawOn(self.c, title_x, title_y)
 
         chart = 'charts/pie_chart_' + self.rec + '_nondac.png'
-        self.c.drawImage(chart, chart_x, chart_y, self.chart['pie_width'], self.chart['pie_height'], mask='auto')
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['pie_width'], self.chart['pie_height'], mask='auto')
 
         return self
 
@@ -159,7 +164,8 @@ class RecipientProfile:
 
         # draw chart
         chart = 'charts/pie_chart_' + self.rec + '_multi.png'
-        self.c.drawImage(chart, chart_x, chart_y, self.chart['pie_width'], self.chart['pie_height'], mask='auto')
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['pie_width'], self.chart['pie_height'], mask='auto')
         return self
 
     def draw_bars(self):
@@ -181,27 +187,48 @@ class RecipientProfile:
 
         x_offset = self.PAGEWIDTH /2 - 100
         y_offset = 600
+        chart_x = x_offset
+        chart_y = y_offset
 
         if self.debug:
             self.c.rect(x_offset, y_offset, 200, 160)
+
+        # draw chart
+        chart = 'charts/bar_chart_' + self.rec + '_agenda.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['bars_width'], self.chart['bars_height'], mask='auto')
 
         return self
 
     def draw_usefulness(self):
-        x_offset = 100
+        x_offset = 70
         y_offset = 400
+        chart_x = x_offset
+        chart_y = y_offset
 
         if self.debug:
             self.c.rect(x_offset, y_offset, 200, 160)
+
+        # draw chart
+        chart = 'charts/bar_chart_' + self.rec + '_use.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['bars_width'], self.chart['bars_height'], mask='auto')
 
         return self
 
     def draw_helpfulness(self):
-        x_offset = 300
+        x_offset = 330
         y_offset = 400
+        chart_x = x_offset
+        chart_y = y_offset
 
         if self.debug:
             self.c.rect(x_offset, y_offset, 200, 160)
+
+        # draw chart
+        chart = 'charts/bar_chart_' + self.rec + '_help.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['bars_width'], self.chart['bars_height'], mask='auto')
 
         return self
 

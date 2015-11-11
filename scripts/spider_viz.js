@@ -1,19 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src='http://d3js.org/d3.v3.min.js'></script>
-</head>
-<body>
-<script>
+/* eslint camelcase: [0] */
+var fs = require('fs');
+var path = require('path');
+var jsdom = require('jsdom');
+var xmlserializer = require('xmlserializer');
+var Promise = require('promise');
+var fetchRecipients = require('./fetch_recipients');
 
-getChart(window);
+fetchRecipients()
+  .then(generateRandomData)
+  .then(writeChartToDisk)
+  .catch(function(err) { console.log(err); });
+
+function generateRandomData() {
+  return new Promise(function(resolve) {
+    resolve({});
+  });
+}
+
+function writeChartToDisk(i, data) {
+  if (!i) i = 0;
+  jsdom.env({
+    features: { QuerySelector: true },
+    html: '<!DOCTYPE html>',
+    script: [ 'http://d3js.org/d3.v3.min.js' ],
+    done: function(err, window) {
+      if (err) return;
+      var svg = getChart(window, data[i]);
+      fs.writeFileSync(
+        path.join(__dirname, '..', 'graphics', 'spider.svg'),
+        xmlserializer.serializeToString(svg),
+        { encoding: 'utf-8' }
+      );
+      if (i < data.length) writeChartToDisk(++i);
+    }
+  });
+}
 
 function getChart(window, data) {
 
-  var d3 =  window.d3;
-  var PX_RATIO = 4 / 3;
+  var d3 = window.d3;
+  //var PX_RATIO = 4 / 3;
 
   data = d3.range(16).map(function(i) {
     return { type: i };
@@ -24,10 +50,6 @@ function getChart(window, data) {
 
   var PI = Math.PI;
   var n = data.length;
-
-  function degrees(rad) {
-    return rad * 180 / PI;
-  }
 
   var COLOR = '#161f34';
 
@@ -71,7 +93,7 @@ function getChart(window, data) {
         return y;
       })
       .attr('stroke', '#000')
-      .attr("stroke-width", 2);
+      .attr('stroke-width', 2);
 
   svg.append('g').append('circle')
     .attr('cx', w / 2)
@@ -114,6 +136,4 @@ function getChart(window, data) {
 
   return window.document.getElementsByTagName('svg')[0];
 }
-</script>
-</body>
-</html>
+

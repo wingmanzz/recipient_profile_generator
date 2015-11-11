@@ -1,5 +1,4 @@
 env
-*.html
 charts
 donors/*
 recipients/*

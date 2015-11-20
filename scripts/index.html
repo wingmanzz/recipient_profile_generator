@@ -7,17 +7,29 @@
 </head>
 <body>
 <script>
+var d = [ { type: 'Q21_PT15', score: 4.631579 },
+  { type: 'Q21_PT16', score: 3.333333 },
+  { type: 'Q21_PT3', score: 3.261364 },
+  { type: 'Q21_PT14', score: 3.25 },
+  { type: 'Q21_PT8', score: 3.126786 },
+  { type: 'Q21_PT13', score: 3.111111 },
+  { type: 'Q21_PT12', score: 2.80303 },
+  { type: 'Q21_PT9', score: 2.65 },
+  { type: 'Q21_PT7', score: 2.600086 },
+  { type: 'Q21_PT1', score: 2.418948 },
+  { type: 'Q21_PT2', score: 2.275 },
+  { type: 'Q21_PT5', score: 2.021491 },
+  { type: 'Q21_PT11', score: 1.6 },
+  { type: 'Q21_PT10', score: 1.5 },
+  { type: 'Q21_PT6', score: 0 },
+  { type: 'Q21_PT4', score: 0 } ];
 
-getChart(window);
+getChart(window, d);
 
 function getChart(window, data) {
 
   var d3 =  window.d3;
   var PX_RATIO = 4 / 3;
-
-  data = d3.range(16).map(function(i) {
-    return { type: i };
-  });
 
   var w = 600,
       h = 600;

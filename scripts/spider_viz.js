@@ -3,35 +3,53 @@ var fs = require('fs');
 var path = require('path');
 var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
-var Promise = require('promise');
-var fetchRecipients = require('./fetch_recipients');
+var ProgressBar = require('progress');
 
-fetchRecipients()
-  .then(generateRandomData)
-  .then(writeChartToDisk)
-  .catch(function(err) { console.log(err); });
+var recipientData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
-function generateRandomData() {
-  return new Promise(function(resolve) {
-    resolve({});
+setBar(recipientData.length); // initiate progress bar
+
+for (var idx = 0; idx < recipientData.length; idx++) {
+  var q21s = Object.keys(recipientData[idx]).filter(function(key) {
+    return key.indexOf('Q21_PT') > -1;
+  }).map(function(key) {
+    return {
+      type: key,
+      score: +recipientData[idx][key]
+    };
+  });
+  q21s.sort(function(a, b) {
+    return b['score'] - a['score'];
+  });
+
+  writeChartToDisk({
+    recipient: recipientData[idx]['AidDataID'],
+    q21s: q21s
   });
 }
 
-function writeChartToDisk(i, data) {
+var bar;
+function setBar(total) {
+  bar = new ProgressBar('Progress [:bar] :percent', { total: total });
+}
+
+function writeChartToDisk(data, i) {
   if (!i) i = 0;
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
-    script: [ 'http://d3js.org/d3.v3.min.js' ],
+    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
     done: function(err, window) {
       if (err) return;
-      var svg = getChart(window, data[i]);
+      var svg = getChart(window, data.q21s);
       fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'spider.svg'),
+        path.join(__dirname, '..', 'graphics', 'spider_chart_' +
+            data.recipient.replace(/ /g, '_') + '.svg'),
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );
-      if (i < data.length) writeChartToDisk(++i);
+      bar.tick();
     }
   });
 }
@@ -40,10 +58,6 @@ function getChart(window, data) {
 
   var d3 = window.d3;
   //var PX_RATIO = 4 / 3;
-
-  data = d3.range(16).map(function(i) {
-    return { type: i };
-  });
 
   var w = 600,
       h = 600;

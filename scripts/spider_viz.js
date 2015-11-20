@@ -8,7 +8,7 @@ var ProgressBar = require('progress');
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
-setBar(recipientData.length); // initiate progress bar
+var bar = new ProgressBar('Progress [:bar] :percent', { total: recipientData.length });
 
 for (var idx = 0; idx < recipientData.length; idx++) {
   var q21s = Object.keys(recipientData[idx]).filter(function(key) {
@@ -27,11 +27,6 @@ for (var idx = 0; idx < recipientData.length; idx++) {
     recipient: recipientData[idx]['AidDataID'],
     q21s: q21s
   });
-}
-
-var bar;
-function setBar(total) {
-  bar = new ProgressBar('Progress [:bar] :percent', { total: total });
 }
 
 function writeChartToDisk(data, i) {

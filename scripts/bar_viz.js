@@ -1,59 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src='http://d3js.org/d3.v3.min.js'></script>
-</head>
-<body>
-<script>
-var data = {
-  "aiddataId": "110593688",
-  "top5": [
-    {
-      "domain": "PD1",
-      "data": {
-        "Q14": 4.5,
-        "Q21": 2.884615,
-        "Q25": 3.4
+var fs = require('fs');
+var path = require('path');
+var R = require('ramda');
+var jsdom = require('jsdom');
+var xmlserializer = require('xmlserializer');
+var ProgressBar = require('progress');
+
+var recipientData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
+
+var bar = new ProgressBar('Progress [:bar] :percent', { total: recipientData.length });
+
+for (var idx = 0; idx < recipientData.length; idx++) {
+  var rec = recipientData[idx];
+  var recipient = { aiddataId: rec['AidDataID'] };
+  var grouped = Object.keys(rec)
+    .filter(function(key) {
+      return key.indexOf('_PD') > -1;
+    })
+    .reduce(function(out, key) {
+      var type = key.split('_')[1];
+      if (!(type in out)) {
+        out[type] = {};
       }
-    },
-    {
-      "domain": "PD24",
-      "data": {
-        "Q14": 0,
-        "Q21": 0,
-        "Q25": 0
-      }
-    },
-    {
-      "domain": "PD3",
-      "data": {
-        "Q14": 4.25,
-        "Q21": 2.602273,
-        "Q25": 4
-      }
-    },
-    {
-      "domain": "PD4",
-      "data": {
-        "Q14": 0,
-        "Q21": 0,
-        "Q25": 0
-      }
-    },
-    {
-      "domain": "PD5",
-      "data": {
-        "Q14": 3.285714,
-        "Q21": 1.5,
-        "Q25": 4
-      }
-    }
-  ]
+      out[type][key.split('_')[0]] = +rec[key];
+      return out;
+    }, {});
+
+  grouped = Object.keys(grouped).map(function(domain) {
+    return {
+      domain: domain,
+      data: grouped[domain]
+    };
+  });
+
+  function order(a, b) { return b.q21 - a.q21; } // eslint-disable-line
+  recipient.top5 = R.take(5, R.sort(order, grouped));
+
+  writeChartToDisk(recipient);
 }
 
-getChart(window, data.top5);
+function writeChartToDisk(data) {
+  jsdom.env({
+    features: { QuerySelector: true },
+    html: '<!DOCTYPE html>',
+    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
+    done: function(err, window) {
+      if (err) return;
+      var svg = getChart(window, data.top5);
+      fs.writeFileSync(
+        path.join(__dirname, '..', 'graphics', 'double_bar_chart_' +
+            data.aiddataId.replace(/ /g, '_') + '.svg'),
+        xmlserializer.serializeToString(svg),
+        { encoding: 'utf-8' }
+      );
+      bar.tick();
+    }
+  });
+}
 
 function getChart(window, _data) {
   var d3 = window.d3;
@@ -230,6 +233,3 @@ function getChart(window, _data) {
 
   return window.document.getElementsByTagName('svg')[0];
 }
-</script>
-</body>
-</html>

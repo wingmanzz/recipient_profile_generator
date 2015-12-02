@@ -14,6 +14,7 @@
     "jsdom": "^3.1.2",
     "progress": "^1.1.8",
     "promise": "^7.0.4",
+    "queue-async": "^1.0.7",
     "ramda": "^0.17.1",
     "request": "^2.65.0",
     "svgexport": "^0.2.4",

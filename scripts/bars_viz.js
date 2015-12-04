@@ -2,51 +2,40 @@ var fs = require('fs');
 var path = require('path');
 var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
-var fetchRecipients = require('./fetch_recipients');
 var Promise = require('promise');
 var ProgressBar = require('progress');
 
-fetchRecipients()
-  .then(generateRandomBarData)
+parseData()
   .then(writeChartsToDisk)
   .catch(function(err) { console.log(err); });
 
-function generateRandomBarData(data) {
-  var recipients = data.recipients;
+function readData() {
+  return JSON.parse(fs.readFileSync(path.join(
+          __dirname, '..', 'data', 'rankings.json')));
+}
+
+function parseData() {
+  // FIX THIS!!!
+  var prob = {
+    '14': 'agenda',
+    '21': 'use',
+    '25': 'help'
+  };
   return new Promise(function(resolve) {
-    resolve(recipients.map(function(r) {
-      var donors = [ 'China', 'Germany', 'France' ];
+    resolve(readData().map(function(r) {
       return {
-        recipient: r.name,
-        data: [
-          {
-            type: 'agenda',
-            donors: donors.map(function(d, i) {
+        recipient: r['CountryID'],
+        data: Object.keys(r.rankings).map(function(q) {
+          return {
+            type: prob[q],
+            donors: r.rankings[q].map(function(donor) {
               return {
-                donor: d,
-                amount: 3 + i
+                donor: donor['Donor_ID'],
+                amount: donor.estimate
               };
             })
-          },
-          {
-            type: 'use',
-            donors: donors.map(function(d, i) {
-              return {
-                donor: d,
-                amount: 3 + i
-              };
-            })
-          },
-          {
-            type: 'help',
-            donors: donors.map(function(d, i) {
-              return {
-                donor: d,
-                amount: 3 + i
-              };
-            })
-          }
-        ]
+          };
+        })
       };
     }));
   });
@@ -135,3 +124,45 @@ function getChart(window, data) {
   return window.document.getElementsByTagName('svg')[0];
 }
 
+/*
+function generateRandomBarData(data) {
+  var recipients = data.recipients;
+  return new Promise(function(resolve) {
+    resolve(recipients.map(function(r) {
+      var donors = [ 'China', 'Germany', 'France' ];
+      return {
+        recipient: r.name,
+        data: [
+          {
+            type: 'agenda',
+            donors: donors.map(function(d, i) {
+              return {
+                donor: d,
+                amount: 3 + i
+              };
+            })
+          },
+          {
+            type: 'use',
+            donors: donors.map(function(d, i) {
+              return {
+                donor: d,
+                amount: 3 + i
+              };
+            })
+          },
+          {
+            type: 'help',
+            donors: donors.map(function(d, i) {
+              return {
+                donor: d,
+                amount: 3 + i
+              };
+            })
+          }
+        ]
+      };
+    }));
+  });
+}
+*/

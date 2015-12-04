@@ -4,6 +4,7 @@ var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
 var Promise = require('promise');
 var ProgressBar = require('progress');
+var R = require('ramda');
 
 parseData()
   .then(writeChartsToDisk)
@@ -15,10 +16,9 @@ function readData() {
 }
 
 function parseData() {
-  // FIX THIS!!!
   var prob = {
-    '14': 'agenda',
-    '21': 'use',
+    '21': 'agenda',
+    '14': 'use',
     '25': 'help'
   };
   return new Promise(function(resolve) {
@@ -26,19 +26,31 @@ function parseData() {
       return {
         recipient: r['CountryID'],
         data: Object.keys(r.rankings).map(function(q) {
+          var ranks = r.rankings[q].map(function(donor) {
+            return {
+              donor: donor['Donor_ID'],
+              amount: +donor.estimate
+            };
+          });
           return {
             type: prob[q],
-            donors: r.rankings[q].map(function(donor) {
-              return {
-                donor: donor['Donor_ID'],
-                amount: donor.estimate
-              };
-            })
+            donors: sort(ranks)
           };
         })
       };
     }));
   });
+}
+
+function sort(arr) {
+  arr = R.sort(function(a, b) {
+    return a.amount - b.amount;
+  }, arr);
+  var sorted = [];
+  sorted.push(arr[1]);
+  sorted.push(arr[2]);
+  sorted.push(arr[0]);
+  return sorted;
 }
 
 var dat = [];
@@ -123,46 +135,3 @@ function getChart(window, data) {
 
   return window.document.getElementsByTagName('svg')[0];
 }
-
-/*
-function generateRandomBarData(data) {
-  var recipients = data.recipients;
-  return new Promise(function(resolve) {
-    resolve(recipients.map(function(r) {
-      var donors = [ 'China', 'Germany', 'France' ];
-      return {
-        recipient: r.name,
-        data: [
-          {
-            type: 'agenda',
-            donors: donors.map(function(d, i) {
-              return {
-                donor: d,
-                amount: 3 + i
-              };
-            })
-          },
-          {
-            type: 'use',
-            donors: donors.map(function(d, i) {
-              return {
-                donor: d,
-                amount: 3 + i
-              };
-            })
-          },
-          {
-            type: 'help',
-            donors: donors.map(function(d, i) {
-              return {
-                donor: d,
-                amount: 3 + i
-              };
-            })
-          }
-        ]
-      };
-    }));
-  });
-}
-*/

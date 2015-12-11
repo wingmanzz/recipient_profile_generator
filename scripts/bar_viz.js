@@ -8,7 +8,7 @@ var ProgressBar = require('progress');
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
-var bar = new ProgressBar('Progress [:bar] :percent', { total: recipientData.length });
+var bar = new ProgressBar('Generating double bar charts [:bar] :percent', { total: recipientData.length });
 
 for (var idx = 0; idx < recipientData.length; idx++) {
   var rec = recipientData[idx];
@@ -196,7 +196,7 @@ function getChart(window, _data) {
     .data(_data)
     .enter()
     .append('text')
-      .text(function(d) { return d.data.Q14; })
+      .text(function(d) { return Math.round(d.data.Q14 * 100) / 100; })
         .attr('x', function(d) { return (w / 2) - xScale(d.data.Q14) - margin.middle - 40; })
         .attr('y', function(d) { return yScale(d.domain) + 30; });
 
@@ -205,7 +205,7 @@ function getChart(window, _data) {
     .data(_data)
     .enter()
     .append('text')
-      .text(function(d) { return d.data.Q21; })
+      .text(function(d) { return Math.round(d.data.Q21 * 100) / 100; })
         .attr('x', function(d) { return (w / 2) + margin.middle + xScale(d.data.Q21) + 15; })
         .attr('y', function(d) { return yScale(d.domain) + 30; });
 

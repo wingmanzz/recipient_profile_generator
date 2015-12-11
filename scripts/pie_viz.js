@@ -54,7 +54,7 @@ function writeChartsToDisk(d) {
 
 var bar;
 function setBar(total) {
-  bar = new ProgressBar('Progress [:bar] :percent', { total: total });
+  bar = new ProgressBar('Generating pie charts [:bar] :percent', { total: total });
 }
 
 function writeChart(i) {

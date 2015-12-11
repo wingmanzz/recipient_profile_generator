@@ -26,8 +26,12 @@ class RecipientProfile:
         self.chart['pie_title_x_offset'] = 40
         self.chart['bars_width'] = 200
         self.chart['bars_height'] = 150
+        self.chart['spider_width'] = 375
+        self.chart['spider_height'] = 375
+        self.chart['double_bar_width'] = 500
+        self.chart['double_bar_height'] = 300
 
-        self.debug = True
+        self.debug = False
 
         self.template().add_charts()
 
@@ -168,6 +172,7 @@ class RecipientProfile:
                 self.chart['pie_width'], self.chart['pie_height'], mask='auto')
         return self
 
+    # double bar chart
     def draw_bars(self):
         border = 40
         height = 300
@@ -179,6 +184,12 @@ class RecipientProfile:
 
         if self.debug:
             self.c.rect(x_offset, y_offset, width, height)
+
+        #draw chart
+        #FIX THIS!!!
+        chart = 'charts/double_bar_chart_110593688.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['double_bar_width'], self.chart['double_bar_height'], mask='auto')
 
         return self
 
@@ -232,14 +243,22 @@ class RecipientProfile:
 
         return self
 
+    # spider chart
     def draw_avg_influence(self):
         border_x = 100
         width = self.PAGEWIDTH - border_x * 2
         x_offset = border_x
         y_offset = 20
+        chart_x = x_offset
+        chart_y = y_offset
 
         if self.debug:
             self.c.rect(x_offset, y_offset, width, 330)
+
+        # FIX THIS!!!
+        chart = 'charts/spider_chart_' + self.rec + '.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['spider_width'], self.chart['spider_height'], mask='auto')
 
         return self
 

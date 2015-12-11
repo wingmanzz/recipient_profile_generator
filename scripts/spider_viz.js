@@ -8,7 +8,7 @@ var ProgressBar = require('progress');
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
-var bar = new ProgressBar('Progress [:bar] :percent', { total: recipientData.length });
+var bar = new ProgressBar('Generating spider chart [:bar] :percent', { total: recipientData.length });
 
 for (var idx = 0; idx < recipientData.length; idx++) {
   var q21s = Object.keys(recipientData[idx]).filter(function(key) {

@@ -56,7 +56,7 @@ function sort(arr) {
 var dat = [];
 var bar;
 function writeChartsToDisk(d) {
-  bar = new ProgressBar('Progress [:bar] :percent', { total: d.length * 3 });
+  bar = new ProgressBar('Generating tiny bar charts [:bar] :percent', { total: d.length * 3 });
   for (var i = 0; i < d.length; i++) {
     for (var j = 0; j < d[i].data.length; j++) {
       dat.push({
@@ -129,9 +129,15 @@ function getChart(window, data) {
   labels.selectAll('text')
     .data(data)
     .enter().append('text')
-      .text(function(d) { return d.donor + ' - ' + d.amount; })
+      .text(function(d) { return d.donor + ' - ' + Math.round(d.amount * 100) / 100; })
         .attr('x', function(d) { return x(d.donor) + 30; })
         .attr('y', function(d) { return h - y(d.amount) + 20; });
+
+  d3.selectAll('text')
+    .style('fill', '#fff')
+    .style('font-family', 'Open Sans')
+    .style('text-anchor', 'middle');
+
 
   return window.document.getElementsByTagName('svg')[0];
 }

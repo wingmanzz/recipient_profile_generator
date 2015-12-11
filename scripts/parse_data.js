@@ -9,39 +9,23 @@ catch(e) {
   if (e.code !== 'EEXIST') throw e;
 }
 
-var dataCSV = fs.readFileSync(
-  path.join(__dirname, 'data/data.csv'), { encoding: 'utf-8' });
-var countryCSV = fs.readFileSync(
-  path.join(__dirname, 'data/country.csv'), { encoding: 'utf-8' });
-var aiddataIdCSV = fs.readFileSync(
-  path.join(__dirname, 'data/donor_recipient_id_crosswalk.csv'), { encoding: 'utf-8' });
-var averageCSV = fs.readFileSync(
-  path.join(__dirname, 'data/averages.csv'), { encoding: 'utf-8' });
+parse(read('DP_Profiles_Raw_Data_CNTR_DATA_TEAM.csv'), 'data.json');
 
-parse('data', dataCSV);
-parse('country', countryCSV);
-parse('crosswalk', aiddataIdCSV);
-parse('average', averageCSV);
-
-function parse(fname, csv) {
-  var data = fname === 'country' ? {} : [];
+function parse(csv, outfile) {
+  var data = [];
   var header = true;
   var row, record, head;
 
-  var dataCSVParser = parser();
+  var csvParser = parser();
 
-  dataCSVParser.on('readable', function() {
-    while (record = dataCSVParser.read()) {
+  csvParser.on('readable', function() {
+    while (record = csvParser.read()) {
       if (!header) {
         row = {};
-        if (fname === 'country') {
-          data[record[0]] = record[3];
-        } else {
-          for (var i = 0; i < record.length; i++) {
-            row[head[i]] = record[i];
-          }
-          data.push(row);
+        for (var i = 0; i < record.length; i++) {
+          row[head[i]] = record[i];
         }
+        data.push(row);
       } else {
         head = record;
         header = false;
@@ -49,15 +33,19 @@ function parse(fname, csv) {
     }
   });
 
-  dataCSVParser.on('finish', function() {
+  csvParser.on('finish', function() {
     fs.writeFile(
-      path.join(__dirname, 'parsed_data', fname + '.json'),
+      path.join(__dirname, 'parsed_data', outfile),
       JSON.stringify(data),
       { encoding: 'utf-8' }
     );
   });
 
-  dataCSVParser.write(csv);
-  dataCSVParser.end();
+  csvParser.write(csv);
+  csvParser.end();
 
+}
+
+function read(fname) {
+  return fs.readFileSync(path.join(__dirname, '..', 'data', fname), { encoding: 'utf-8' });
 }

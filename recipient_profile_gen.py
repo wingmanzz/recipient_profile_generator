@@ -1,189 +1,289 @@
-import os
-
-from multiprocessing import Process
 from reportlab.pdfgen import canvas
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
-from reportlab.lib import colors
-from reportlab.pdfbase.pdfmetrics import stringWidth
-from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import letter
-
-PAGEWIDTH, PAGEHEIGHT = letter
+from reportlab.lib import colors
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.utils import ImageReader
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
 # register Open Sans
 pdfmetrics.registerFont(TTFont('Open Sans', 'assets/fonts/fonts-open-sans/OpenSans-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Open Sans Bold', 'assets/fonts/fonts-open-sans/OpenSans-Bold.ttf'))
 
+class RecipientProfile:
 
-# get the immediate directories of a directory
-def get_immediate_subdirectories(a_dir):
-    return [name for name in os.listdir(a_dir)
-            if os.path.isdir(os.path.join(a_dir, name))]
+    def __init__(self, rec):
+        self.rec = rec
+        self.c = canvas.Canvas(rec + '.pdf')
+        self.PAGEWIDTH, self.PAGEHEIGHT = letter
 
+        # chart size constants
+        self.chart = {}
+        self.chart['pie_width'] = 170
+        self.chart['pie_height'] = 170
+        self.chart['pie_title_y_offset'] = 170
+        self.chart['pie_title_x_offset'] = 40
+        self.chart['bars_width'] = 200
+        self.chart['bars_height'] = 150
+        self.chart['spider_width'] = 375
+        self.chart['spider_height'] = 375
+        self.chart['double_bar_width'] = 500
+        self.chart['double_bar_height'] = 300
 
-# draw a multiline string
-def drawMultiString( c, x, y, s ):
-    for ln in s.split('\n'):
-        c.drawString( x, y, ln )
-        y -= c._leading
-    return c
+        self.debug = False
 
+        self.template().add_charts()
 
-################################
-# Function HeaderOverview - header for overview page
-def drawHeader(canvas, recipient):
-    recipient_name = recipient.replace('_', ' ')
+    def template(self):
+        self.draw_header()
+        return self
 
-    canvas.saveState()
-    headboxh = 80
-    headboxx = 20
-    headboxy = 695
-    headboxw = 570
-    footboxh = 65
-    footboxx = 20
-    footboxy = 20
-    footboxw = 570
+    def draw_header(self):
+        height_blue = 70
+        x_offset_blue = 0
+        y_offset_blue = self.PAGEHEIGHT + 50 - height_blue
 
-    # aiddata logo
-    logouri = "assets/images/aiddata_main_wht.png"
-    mapuri = "recipients/" + recipient + "/map.png"
-    influenceuri = "recipients/" + recipient + "/influence.png"
-    adviceuri = "recipients/" + recipient + "/advice.png"
-    advicelegenduri = "assets/images/bubble_legend.png"
-    compuri = "recipients/" + recipient + "/comp.png"
-    comp2uri = "recipients/" + recipient + "/comp2.png"
+        # blue header
+        self.c.setFillColorRGB(.086, .121, .203)
+        self.c.rect(x_offset_blue, y_offset_blue, self.PAGEWIDTH, height_blue, fill=1)
+        self.c.setFillColor(colors.white)
+        self.c.setFont('Open Sans', 20)
+        #self.c.drawString(headboxx, headboxy + .425 * headboxh, 'Partner Country Profile')
 
-    # blue header
-    canvas.setFillColorRGB(.086, .121, .203)
-    canvas.rect(headboxx, headboxy, headboxw, headboxh, fill=1)
-    canvas.saveState()
-    canvas.setFillColor(colors.white)
-    canvas.setFont('Open Sans', 20)
-    canvas.drawString(headboxx + 160, headboxy + .425 * headboxh, "Partner Country Profile")
+        # green header
+        height_green = 30
+        x_offset_green = 0
+        y_offset_green = y_offset_blue - height_green
+        self.c.setFillColorRGB(0.46, 0.71, 0.34)
+        self.c.rect(x_offset_green, y_offset_green, self.PAGEWIDTH, height_green, fill=1)
 
-    # green header
-    headboxh = 30
-    headboxx = 20
-    headboxy = 665
-    headboxw = 570
-    canvas.setFillColorRGB(.461, .711, .340)
-    canvas.rect(headboxx, headboxy, headboxw, headboxh, fill=1)
-    canvas.saveState()
-    canvas.setFillColor(colors.white)
-    canvas.setFont('Open Sans', 18)
-    recipient_year = recipient_name + " 2015"
-    textWidth = stringWidth(recipient_year, "Open Sans", 18)
-    canvas.drawString(headboxx + headboxw - (textWidth + 10), headboxy + .30 * headboxh, recipient_name + " 2015")
+        return self
 
-    # add logo
-    logo = ImageReader(logouri)
-    canvas.drawImage(logo, 30, 700, 120, 68, mask='auto')
+    def add_charts(self):
+        self.draw_title()
+        self.draw_pie_legend()
+        self.draw_dac()
+        self.draw_nondac()
+        self.draw_multi()
+        self.draw_bars()
+        self.draw_agenda()
+        self.draw_usefulness()
+        self.draw_helpfulness()
+        self.draw_avg_influence()
+        self.draw_footer()
 
+        return self
 
-    # add map
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Distribution of " + recipient_name + "'s"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 650, title_str)
-    title_str = "Official Development Assistance(ODA) 2004-2013"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 638, title_str)
-    map = ImageReader(mapuri)
-    canvas.drawImage(map, 75, 305, 450, 350, mask='auto')
+    def draw_title(self):
+        border = 20
+        x_offset = border
+        y_offset = 700
+        x = x_offset
+        y = y_offset
 
-    # add influence chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Three Aspects of " + recipient_name + "'s Performance in the Countries It Influences Most"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 310, title_str)
-    influence = ImageReader(influenceuri)
-    canvas.drawImage(influence, 80, 20, 450, 275, mask='auto')
+        if self.debug:
+            self.c.rect(x_offset, y_offset, self.PAGEWIDTH - border * 2, 20)
 
-    # move to next page
-    canvas.showPage()
+        title = self.rec.replace('_', ' ') + '\'s Top Development Partners, ODA 2004-2013 (Millions USD)'
+        p = Paragraph(title, getSampleStyleSheet()['Normal'])
+        p.wrapOn(self.c, self.PAGEWIDTH - border * 2, 100)
+        p.drawOn(self.c, x, y)
 
-    # add advice chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Usefulness of Advice, Volume of ODA and Agenda-Setting Influence, by Policy Area"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 750, title_str)
-    advice = ImageReader(adviceuri)
-    canvas.drawImage(advice, 75, 530, 350, 200, mask='auto')
-    advicelegend = ImageReader(advicelegenduri)
-    canvas.drawImage(advicelegend, 450, 545,150,200, mask='auto')
+        return self
 
-    # add advice comp chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Usefulness of " + recipient_name + "'s Advice Compared to the Average"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 3) - (textWidth / 2)
-    canvas.drawString(pl, 500, title_str)
-    canvas.setFont('Open Sans', 6)
-    key_str1 = "All Other Development Partners"
-    canvas.drawString(pl+60,487, key_str1)
-    canvas.drawString(pl+210,487, recipient_name)
-    canvas.setStrokeColorRGB(.461, .711, .340)
-    canvas.line(pl+30, 489, pl+50, 489)
-    canvas.setStrokeColorRGB(.890, .118, .118)
-    canvas.line(pl+180, 489, pl+200, 489)
-    comp = ImageReader(compuri)
-    canvas.drawImage(comp, 45, 280, 225, 200, mask='auto')
+    def draw_pie_legend(self):
+        x_offset = 40
+        y_offset = 350
 
-    # add design reforms list
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 100, 100)
 
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = recipient_name+ "'s Influence in Designing\nReforms for Different Problem Types"
-    pl = 400
-    canvas = drawMultiString(canvas, pl, 500, title_str)
+    def draw_dac(self):
+        # location
+        x_offset = 50
+        y_offset = 490
+        title_x = x_offset + self.chart['pie_title_x_offset']
+        title_y = y_offset + self.chart['pie_title_y_offset']
+        chart_x = x_offset
+        chart_y = y_offset
 
-    # add comp2 chart
-    canvas.setFont('Open Sans', 12)
-    canvas.setFillColor(colors.black)
-    title_str = "Three Dimensions of  " + recipient_name + "'s Performance Compared to Other Development Partners"
-    textWidth = stringWidth(title_str, "Open Sans", 12)
-    pl = (PAGEWIDTH / 2) - (textWidth / 2)
-    canvas.drawString(pl, 250, title_str)
-    comp2 = ImageReader(comp2uri)
-    canvas.drawImage(comp2, 45, 110, 525, 125, mask='auto')
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 200)
 
+        # draw title
+        title = 'Top 5 DAC Development Partners'
+        p = Paragraph(title, getSampleStyleSheet()['Normal'])
+        p.wrapOn(self.c, 100, 100)
+        p.drawOn(self.c, title_x, title_y)
 
-    # blue footer
-    canvas.setStrokeColorRGB(.086, .121, .203)
-    canvas.setFillColorRGB(.086, .121, .203)
-    canvas.rect(footboxx, footboxy, footboxw, footboxh, fill=1)
-    canvas.saveState()
-    canvas.setFillColor(colors.white)
+        # draw chart
+        chart = 'charts/pie_chart_' + self.rec + '_dac.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['pie_width'], self.chart['pie_height'], mask='auto')
 
-    # add logo
-    logo = ImageReader(logouri)
-    canvas.drawImage(logo, 475, 20, 105, 65, mask='auto')
+        return self
 
-    return canvas
+    def draw_nondac(self):
+        # location
+        x_offset = 350
+        y_offset = 490
+        title_x = x_offset + self.chart['pie_title_x_offset']
+        title_y = y_offset + self.chart['pie_title_y_offset']
+        chart_x = x_offset
+        chart_y = y_offset
 
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 200)
 
-recipient_dirs = get_immediate_subdirectories("recipients")
+        # draw title
+        title = 'Top 5 NonDAC Development Partners'
+        p = Paragraph(title, getSampleStyleSheet()['Normal'])
+        p.wrapOn(self.c, 100, 100)
+        p.drawOn(self.c, title_x, title_y)
 
-def writePdf(recipient):
-    c = canvas.Canvas("recipients/" + recipient + "/recipient_profile.pdf", pagesize=letter)
-    c.setLineWidth(.3)
-    c.setFont('Open Sans', 12)
+        chart = 'charts/pie_chart_' + self.rec + '_nondac.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['pie_width'], self.chart['pie_height'], mask='auto')
 
-    c = drawHeader(c, recipient)
+        return self
 
-    c.save()
+    def draw_multi(self):
+        # location
+        x_offset = self.PAGEWIDTH / 2 - 100
+        y_offset = 350
+        title_x = x_offset + self.chart['pie_title_x_offset']
+        title_y = y_offset + self.chart['pie_title_y_offset']
+        chart_x = x_offset
+        chart_y = y_offset
 
-jobs = []
-for recipient in recipient_dirs:
-    p = Process(target=writePdf, args=(recipient,))
-    jobs.append(p)
-    p.start()
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 200)
+
+        # draw title
+        title = 'Top 5 MultiLateral Development Partners'
+        p = Paragraph(title, getSampleStyleSheet()['Normal'])
+        p.wrapOn(self.c, 100, 100)
+        p.drawOn(self.c, title_x, title_y)
+
+        # draw chart
+        chart = 'charts/pie_chart_' + self.rec + '_multi.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['pie_width'], self.chart['pie_height'], mask='auto')
+        return self
+
+    # double bar chart
+    def draw_bars(self):
+        border = 40
+        height = 300
+        width = self.PAGEWIDTH - border * 2
+        x_offset = border
+        y_offset = self.PAGEHEIGHT - 750
+        chart_x = x_offset
+        chart_y = y_offset
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, width, height)
+
+        #draw chart
+        #FIX THIS!!!
+        chart = 'charts/double_bar_chart_110593688.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['double_bar_width'], self.chart['double_bar_height'], mask='auto')
+
+        return self
+
+    def draw_agenda(self):
+        self.c.showPage()
+
+        x_offset = self.PAGEWIDTH /2 - 100
+        y_offset = 600
+        chart_x = x_offset
+        chart_y = y_offset
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 160)
+
+        # draw chart
+        chart = 'charts/bar_chart_' + self.rec + '_agenda.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['bars_width'], self.chart['bars_height'], mask='auto')
+
+        return self
+
+    def draw_usefulness(self):
+        x_offset = 70
+        y_offset = 400
+        chart_x = x_offset
+        chart_y = y_offset
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 160)
+
+        # draw chart
+        chart = 'charts/bar_chart_' + self.rec + '_use.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['bars_width'], self.chart['bars_height'], mask='auto')
+
+        return self
+
+    def draw_helpfulness(self):
+        x_offset = 330
+        y_offset = 400
+        chart_x = x_offset
+        chart_y = y_offset
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, 200, 160)
+
+        # draw chart
+        chart = 'charts/bar_chart_' + self.rec + '_help.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['bars_width'], self.chart['bars_height'], mask='auto')
+
+        return self
+
+    # spider chart
+    def draw_avg_influence(self):
+        border_x = 100
+        width = self.PAGEWIDTH - border_x * 2
+        x_offset = border_x
+        y_offset = 20
+        chart_x = x_offset
+        chart_y = y_offset
+
+        if self.debug:
+            self.c.rect(x_offset, y_offset, width, 330)
+
+        # FIX THIS!!!
+        chart = 'charts/spider_chart_' + self.rec + '.png'
+        self.c.drawImage(chart, chart_x, chart_y, \
+                self.chart['spider_width'], self.chart['spider_height'], mask='auto')
+
+        return self
+
+    def draw_footer(self):
+        logo = ImageReader('assets/images/aiddata_main_wht.png')
+        x_offset = 0
+        y_offset = 0
+        width = self.PAGEWIDTH
+        height = 70
+
+        self.c.setFillColorRGB(.086, .121, .203)
+        self.c.rect(x_offset, y_offset, width, height, fill=1)
+
+        logo_x = x_offset + 450
+        logo_y = y_offset
+        self.c.drawImage(logo, logo_x, logo_y, 120, 68, preserveAspectRatio=True, mask='auto')
+
+        return self
+
+    def save(self):
+        self.c.save()
+
+        return self
+
+if __name__ == '__main__':
+    for rec in ['Afghanistan']:
+        p = RecipientProfile(rec)
+        p.save()

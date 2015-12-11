@@ -1,0 +1,55 @@
+Donor_ID,AidDataID,estimate,ev_1,rank,WBG_Region,q
+South Korea,40497944,3.6399206,65,1,East Asia and Pacific,14
+World Bank,112064768,3.5215625,197,2,East Asia and Pacific,14
+International Monetary Fund,63,3.4816358,72,3,East Asia and Pacific,14
+Global Alliance for Vaccines and Immunization,40001644,3.6,5,1,East Asia and Pacific,21
+Brazil,75,3.3333334,11,2,East Asia and Pacific,21
+Asian Development Bank,3,2.9769787,284,3,East Asia and Pacific,21
+Spain,45,3.9166667,5,1,East Asia and Pacific,25
+Sweden,46,3.7453704,17,2,East Asia and Pacific,25
+United Nations,112064776,3.7158889,60,3,East Asia and Pacific,25
+Denmark,12,4.3333333,5,1,Europe and Central Asia,14
+Sweden,46,4.1168849,86,2,Europe and Central Asia,14
+World Bank,112064768,3.9906381,209,3,Europe and Central Asia,14
+European Union,96659736,3.407603,429,1,Europe and Central Asia,21
+South Korea,40497944,3.3020833,10,2,Europe and Central Asia,21
+World Bank,112064768,3.2660205,356,3,Europe and Central Asia,21
+International Monetary Fund,63,4.083631,62,1,Europe and Central Asia,25
+Global Fund to Fight AIDS Tuberculosis and Malaria,67,4,5,2,Europe and Central Asia,25
+European Union,96659736,3.931961,180,3,Europe and Central Asia,25
+Global Fund to Fight AIDS Tuberculosis and Malaria,67,4.0625,9,1,Latin America and the Caribbean,14
+Caribbean Development Bank,10,3.9577778,36,2,Latin America and the Caribbean,14
+Taiwan,3298046,3.75,7,3,Latin America and the Caribbean,14
+Sweden,46,3.609127,17,1,Latin America and the Caribbean,21
+InterAmerican Development Bank,20,3.142818,321,2,Latin America and the Caribbean,21
+International Monetary Fund,63,3.0049314,136,3,Latin America and the Caribbean,21
+Global Environment Facility,19,3.625,5,1,Latin America and the Caribbean,25
+Germany,53,3.5866667,50,2,Latin America and the Caribbean,25
+International Monetary Fund,63,3.5492593,62,3,Latin America and the Caribbean,25
+Netherlands,37,3.85,18,1,Middle East and North Africa,14
+World Bank,112064768,3.7844634,170,2,Middle East and North Africa,14
+Global Environment Facility,19,3.75,7,3,Middle East and North Africa,14
+International Monetary Fund,63,3.1294536,84,1,Middle East and North Africa,21
+Norway,40,2.9450758,25,2,Middle East and North Africa,21
+World Bank,112064768,2.9324239,208,3,Middle East and North Africa,21
+International Monetary Fund,63,3.5729167,34,1,Middle East and North Africa,25
+Belgium,7,3.4444444,7,2,Middle East and North Africa,25
+Germany,53,3.2895089,96,3,Middle East and North Africa,25
+Netherlands,37,3.9270833,12,1,South Asia,14
+World Bank,112064768,3.7586185,146,2,South Asia,14
+United Nations Children's Fund,50,3.5798115,45,3,South Asia,14
+World Bank,112064768,3.2086867,190,1,South Asia,21
+United Kingdom,51,3.0352395,202,2,South Asia,21
+International Monetary Fund,63,2.7832341,65,3,South Asia,21
+Netherlands,37,4,6,1,South Asia,25
+India,4653485,3.4666667,18,2,South Asia,25
+World Bank,112064768,3.4420139,113,3,South Asia,25
+Global Fund to Fight AIDS Tuberculosis and Malaria,67,4.6,17,1,Sub-Saharan Africa,14
+Global Alliance for Vaccines and Immunization,40001644,4.5714286,7,2,Sub-Saharan Africa,14
+Finland,17,3.9375,8,3,Sub-Saharan Africa,14
+Global Environment Facility,19,3.9166667,8,1,Sub-Saharan Africa,21
+World Bank,112064768,3.4995784,859,2,Sub-Saharan Africa,21
+International Monetary Fund,63,3.2562059,427,3,Sub-Saharan Africa,21
+Global Alliance for Vaccines and Immunization,40001644,4.25,9,1,Sub-Saharan Africa,25
+Ireland,29,4.175,9,2,Sub-Saharan Africa,25
+International Monetary Fund,63,3.8924509,208,3,Sub-Saharan Africa,25

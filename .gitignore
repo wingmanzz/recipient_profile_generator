@@ -1,5 +1,4 @@
 env
-*.html
 charts
 donors/*
 recipients/*
@@ -7,3 +6,4 @@ node_modules/*
 graphics
 charts
 parsed_data
+*.pdf

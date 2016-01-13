@@ -71,6 +71,7 @@ function writeChartsToDisk(d) {
 function writeChart(i) {
   if (!i) i = 0;
   var d = dat[i];
+  if (i == dat.length) return;
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',

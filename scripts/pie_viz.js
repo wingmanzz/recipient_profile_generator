@@ -9,7 +9,7 @@ var ProgressBar = require('progress');
 fetchRecipients()
   .then(generateRandomPieData)
   .then(writeChartsToDisk)
-  .catch(function(err) { console.log(err); });
+  .catch(function(err) { console.log("error"); });
 
 function generateRandomPieData(data) {
   setBar(data.count);
@@ -60,6 +60,7 @@ function setBar(total) {
 function writeChart(i) {
   if (!i) i = 0;
   var p = pairs[i];
+  if (i >= pairs.length) return;
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
@@ -73,8 +74,8 @@ function writeChart(i) {
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );
-      bar.tick();
       if (i < pairs.length) writeChart(++i);
+      bar.tick();
     }
   });
 }

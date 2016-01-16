@@ -36,6 +36,9 @@ class RecipientProfile:
         self.style_sheet.add(ParagraphStyle(name='legend',
                                fontName='Open Sans Bold',
                                fontSize=6))
+                               
+        # aiddata logo
+        self.logouri = "assets/images/aiddata_main_wht.png"
 
         # chart size constants
         self.chart = {}
@@ -66,6 +69,11 @@ class RecipientProfile:
         # blue header
         self.c.setFillColorRGB(.086, .121, .203)
         self.c.rect(x_offset_blue, y_offset_blue, self.PAGEWIDTH, height_blue, fill=1)
+        
+        # add logo
+        logo = ImageReader(self.logouri)
+        self.c.drawImage(logo, 30, 773, 120, 68,preserveAspectRatio=True, mask='auto')
+
        
         # green header
         height_green = 30

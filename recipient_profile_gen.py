@@ -46,10 +46,10 @@ class RecipientProfile:
         self.chart['pie_height'] = 170
         self.chart['pie_title_y_offset'] = 170
         self.chart['pie_title_x_offset'] = 40
-        self.chart['bars_width'] = 200
-        self.chart['bars_height'] = 150
-        self.chart['spider_width'] = 375
-        self.chart['spider_height'] = 375
+        self.chart['bars_width'] = 190
+        self.chart['bars_height'] = 140
+        self.chart['spider_width'] = 350
+        self.chart['spider_height'] = 350
         self.chart['double_bar_width'] = 475
         self.chart['double_bar_height'] = 275
 
@@ -105,6 +105,7 @@ class RecipientProfile:
         self.draw_usefulness()
         self.draw_helpfulness()
         self.draw_avg_influence()
+        self.draw_perf_note()
         self.draw_footer()
 
         return self
@@ -130,13 +131,19 @@ class RecipientProfile:
 
         return self
 
-    def draw_pie_legend(self):
-        x_offset = 40
-        y_offset = 350
+    def draw_perf_note(self):
 
-        if self.debug:
-            self.c.rect(x_offset, y_offset, 100, 100)
+        self.c.setFillColor(colors.black)
+        self.c.setFont('Open Sans', 8)
             
+        legend = 'Note: The top 3 development partners in each of the 3 aspects of performance that survey respondent evaluated.'
+        p = Paragraph(legend, style=self.style_sheet["legend"])
+        p.wrapOn(self.c, self.PAGEWIDTH, 100)
+        p.drawOn(self.c, 73, 428)
+        
+        
+    def draw_pie_legend(self):
+		
         self.c.setFillColor(colors.black)
         self.c.setFont('Open Sans', 8)
             
@@ -241,7 +248,6 @@ class RecipientProfile:
     	self.c.drawString(pl, 315, title)
 
         #draw chart
-        #FIX THIS!!!
         chart = 'charts/double_bar_chart_' + self.rec + '.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['double_bar_width'], self.chart['double_bar_height'], mask='auto')
@@ -252,7 +258,7 @@ class RecipientProfile:
         self.c.showPage()
 
         x_offset = self.PAGEWIDTH /2 - 100
-        y_offset = 600
+        y_offset = 650
         chart_x = x_offset
         chart_y = y_offset
 
@@ -264,11 +270,18 @@ class RecipientProfile:
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['bars_width'], self.chart['bars_height'], mask='auto')
 
+        title = 'Agenda-Setting Influence'
+        
+        textWidth = stringWidth(title, "Open Sans", 12)
+        self.c.setFont('Open Sans', 12)
+        self.c.setFillColor(colors.black)
+    	pl = (self.PAGEWIDTH / 2) - (textWidth / 2)
+    	self.c.drawString(pl, self.PAGEHEIGHT+10, title)
         return self
 
     def draw_usefulness(self):
         x_offset = 70
-        y_offset = 400
+        y_offset = 450
         chart_x = x_offset
         chart_y = y_offset
 
@@ -280,11 +293,17 @@ class RecipientProfile:
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['bars_width'], self.chart['bars_height'], mask='auto')
 
+        title = 'Usefulness of Policy Advice'
+    
+        self.c.setFont('Open Sans', 12)
+        self.c.setFillColor(colors.black)
+    	pl = 83
+    	self.c.drawString(pl, 600, title)
         return self
 
     def draw_helpfulness(self):
         x_offset = 330
-        y_offset = 400
+        y_offset = 450
         chart_x = x_offset
         chart_y = y_offset
 
@@ -295,25 +314,40 @@ class RecipientProfile:
         chart = 'charts/bar_chart_' + self.rec + '_help.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['bars_width'], self.chart['bars_height'], mask='auto')
-
+        
+        title = 'Helpfulness in Implementation'
+    
+        self.c.setFont('Open Sans', 12)
+        self.c.setFillColor(colors.black)
+    	pl = 340
+    	self.c.drawString(pl, 600, title)
+        return self
         return self
 
     # spider chart
     def draw_avg_influence(self):
-        border_x = 100
+        border_x = 125
         width = self.PAGEWIDTH - border_x * 2
         x_offset = border_x
-        y_offset = 20
+        y_offset = 40
         chart_x = x_offset
         chart_y = y_offset
 
         if self.debug:
             self.c.rect(x_offset, y_offset, width, 330)
 
-        # FIX THIS!!!
         chart = 'charts/spider_chart_' + self.rec + '.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['spider_width'], self.chart['spider_height'], mask='auto')
+        
+         
+        title = 'Average Development Partner Influence at the Agenda-Setting Stage'
+             
+        textWidth = stringWidth(title, "Open Sans", 12)
+        self.c.setFont('Open Sans', 12)
+        self.c.setFillColor(colors.black)
+    	pl = (self.PAGEWIDTH / 2) - (textWidth / 2)
+    	self.c.drawString(pl, 360, title)
 
         return self
 

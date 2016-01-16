@@ -36,6 +36,9 @@ class RecipientProfile:
         self.style_sheet.add(ParagraphStyle(name='legend',
                                fontName='Open Sans Bold',
                                fontSize=6))
+        self.style_sheet.add(ParagraphStyle(name='smalllegend',
+                               fontName='Open Sans Bold',
+                               fontSize=5))
                                
         # aiddata logo
         self.logouri = "assets/images/aiddata_main_wht.png"
@@ -251,7 +254,21 @@ class RecipientProfile:
         chart = 'charts/double_bar_chart_' + self.rec + '.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['double_bar_width'], self.chart['double_bar_height'], mask='auto')
-
+		
+        legend1 = 'Usefulness of Policy Advice (1-5)'
+        p = Paragraph(legend1, style=self.style_sheet["smalllegend"])
+        p.wrapOn(self.c, self.PAGEWIDTH, 100)
+        p.drawOn(self.c, 125, 287)
+        
+        legend1 = 'Helpfulness in Implementation (0-5)'
+        p = Paragraph(legend1, style=self.style_sheet["smalllegend"])
+        p.wrapOn(self.c, self.PAGEWIDTH, 100)
+        p.drawOn(self.c, 375, 287)
+        
+        note = '*Domain-specfic ODA refers to amount of ODA committed to each policy domain.'
+        p = Paragraph(note, style=self.style_sheet["smalllegend"])
+        p.wrapOn(self.c, self.PAGEWIDTH, 100)
+        p.drawOn(self.c, 73, 10)
         return self
 
     def draw_agenda(self):
@@ -364,6 +381,31 @@ class RecipientProfile:
         logo_x = x_offset + 450
         logo_y = y_offset
         self.c.drawImage(logo, logo_x, logo_y, 120, 68, preserveAspectRatio=True, mask='auto')
+        
+        style = getSampleStyleSheet()['Normal']
+        style.leading = 7
+        
+        datastr1 = "<font color='white' fontName='Open Sans' size=7><b>Perceptions Data Availibility</b><br/></font> \
+        <font color='white' fontName='Open Sans' size=6>Source: 2014 Reform Efforts Survey<br/> \
+        Number of Policy Domains:20<br/> \
+        Number of Respondents:<br/> \
+        1. Embasssies: 84<br/> \
+        2. GIZ: 36<br/> \
+        3. KfW: 19<br/></font>"
+         
+        datastr2 = "<font color='white' fontName='Open Sans' size=7><b>Financial Data Availability</b><br/></font> \
+        <font color='white' fontName='Open Sans' size=6>Source: AidData Core Database, 2004-2013<br/> \
+        Number of Recipients:12<br/> \
+        Total Projects: 245<br/> \
+        Total Commitments (USD 2011): $21.3 million<br/></font>"
+    
+    	pData1 = Paragraph(datastr1, style)
+        pData1.wrapOn(self.c, 150, 400)
+        pData1.drawOn(self.c, 25, 10)
+        
+        pData2 = Paragraph(datastr2, style)
+        pData2.wrapOn(self.c, 150, 400)
+        pData2.drawOn(self.c, 180, 25)
 
         return self
 

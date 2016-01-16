@@ -68,7 +68,7 @@ class RecipientProfile:
 
         # blue header
         self.c.setFillColorRGB(.086, .121, .203)
-        self.c.rect(x_offset_blue, y_offset_blue, self.PAGEWIDTH, height_blue, fill=1)
+        self.c.rect(x_offset_blue, y_offset_blue, self.PAGEWIDTH, height_blue, stroke=0, fill=1)
         
         # add logo
         logo = ImageReader(self.logouri)
@@ -80,11 +80,16 @@ class RecipientProfile:
         x_offset_green = 0
         y_offset_green = y_offset_blue - height_green
         self.c.setFillColorRGB(0.46, 0.71, 0.34)
-        self.c.rect(x_offset_green, y_offset_green, self.PAGEWIDTH, height_green, fill=1)
+        self.c.rect(x_offset_green, y_offset_green, self.PAGEWIDTH, height_green, stroke=0, fill=1)
         
         self.c.setFillColor(colors.white)
         self.c.setFont('Open Sans', 20)
         self.c.drawString((self.PAGEWIDTH/2)-100, self.PAGEHEIGHT+10 , 'Partner Country Profile')
+        
+        donor_year = self.rec + " 2015"
+        textWidth = stringWidth(donor_year, "Open Sans", 18)
+        self.c.setFont('Open Sans', 18)
+        self.c.drawString(self.PAGEWIDTH - (textWidth + 25), self.PAGEHEIGHT - 40, donor_year)
 
 
         return self

@@ -5,11 +5,16 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.utils import ImageReader
 from reportlab.platypus import Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.pdfbase.pdfmetrics import stringWidth
+
+
 
 # register Open Sans
 pdfmetrics.registerFont(TTFont('Open Sans', 'assets/fonts/fonts-open-sans/OpenSans-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Open Sans Bold', 'assets/fonts/fonts-open-sans/OpenSans-Bold.ttf'))
+
+
 
 class RecipientProfile:
 
@@ -17,6 +22,20 @@ class RecipientProfile:
         self.rec = rec
         self.c = canvas.Canvas(rec + '.pdf')
         self.PAGEWIDTH, self.PAGEHEIGHT = letter
+        
+        self.headboxh = 80
+    	self.headboxx = 20
+    	self.headboxy = 695
+    	self.headboxw = 570
+    	self.footboxh = 65
+    	self.footboxx = 20
+    	self.footboxy = 20
+    	self.footboxw = 570
+    	
+        self.style_sheet = getSampleStyleSheet()
+        self.style_sheet.add(ParagraphStyle(name='legend',
+                               fontName='Open Sans Bold',
+                               fontSize=6))
 
         # chart size constants
         self.chart = {}
@@ -28,8 +47,8 @@ class RecipientProfile:
         self.chart['bars_height'] = 150
         self.chart['spider_width'] = 375
         self.chart['spider_height'] = 375
-        self.chart['double_bar_width'] = 500
-        self.chart['double_bar_height'] = 300
+        self.chart['double_bar_width'] = 475
+        self.chart['double_bar_height'] = 275
 
         self.debug = False
 
@@ -47,16 +66,18 @@ class RecipientProfile:
         # blue header
         self.c.setFillColorRGB(.086, .121, .203)
         self.c.rect(x_offset_blue, y_offset_blue, self.PAGEWIDTH, height_blue, fill=1)
-        self.c.setFillColor(colors.white)
-        self.c.setFont('Open Sans', 20)
-        #self.c.drawString(headboxx, headboxy + .425 * headboxh, 'Partner Country Profile')
-
+       
         # green header
         height_green = 30
         x_offset_green = 0
         y_offset_green = y_offset_blue - height_green
         self.c.setFillColorRGB(0.46, 0.71, 0.34)
         self.c.rect(x_offset_green, y_offset_green, self.PAGEWIDTH, height_green, fill=1)
+        
+        self.c.setFillColor(colors.white)
+        self.c.setFont('Open Sans', 20)
+        self.c.drawString((self.PAGEWIDTH/2)-100, self.PAGEHEIGHT+10 , 'Partner Country Profile')
+
 
         return self
 
@@ -86,9 +107,13 @@ class RecipientProfile:
             self.c.rect(x_offset, y_offset, self.PAGEWIDTH - border * 2, 20)
 
         title = self.rec.replace('_', ' ') + '\'s Top Development Partners, ODA 2004-2013 (Millions USD)'
-        p = Paragraph(title, getSampleStyleSheet()['Normal'])
-        p.wrapOn(self.c, self.PAGEWIDTH - border * 2, 100)
-        p.drawOn(self.c, x, y)
+        
+        
+        textWidth = stringWidth(title, "Open Sans", 12)
+        self.c.setFont('Open Sans', 12)
+        self.c.setFillColor(colors.black)
+    	pl = (self.PAGEWIDTH / 2) - (textWidth / 2)
+    	self.c.drawString(pl, 705, title)
 
         return self
 
@@ -98,6 +123,14 @@ class RecipientProfile:
 
         if self.debug:
             self.c.rect(x_offset, y_offset, 100, 100)
+            
+        self.c.setFillColor(colors.black)
+        self.c.setFont('Open Sans', 8)
+            
+        legend = '(1) ODA = Official Development Assistance<br/>(2) DAC = Development Assistance Committee<br/>(3) Non-DAC = Non-DAC countries<br/>(4) All USD values are constant to USD-2011'
+        p = Paragraph(legend, style=self.style_sheet["legend"])
+        p.wrapOn(self.c, 160, 200)
+        p.drawOn(self.c, 60, 400)
 
     def draw_dac(self):
         # location
@@ -177,17 +210,26 @@ class RecipientProfile:
         border = 40
         height = 300
         width = self.PAGEWIDTH - border * 2
-        x_offset = border
-        y_offset = self.PAGEHEIGHT - 750
+        x_offset = border+15
+        y_offset = self.PAGEHEIGHT - 775
         chart_x = x_offset
         chart_y = y_offset
 
         if self.debug:
             self.c.rect(x_offset, y_offset, width, height)
+        
+        title = 'Aspects of Development Partner Performance by Most Influenced Policy Domains'
+        
+        
+        textWidth = stringWidth(title, "Open Sans", 12)
+        self.c.setFont('Open Sans', 12)
+        self.c.setFillColor(colors.black)
+    	pl = (self.PAGEWIDTH / 2) - (textWidth / 2)
+    	self.c.drawString(pl, 315, title)
 
         #draw chart
         #FIX THIS!!!
-        chart = 'charts/double_bar_chart_110593688.png'
+        chart = 'charts/double_bar_chart_' + self.rec + '.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['double_bar_width'], self.chart['double_bar_height'], mask='auto')
 
@@ -284,6 +326,6 @@ class RecipientProfile:
         return self
 
 if __name__ == '__main__':
-    for rec in ['Afghanistan']:
+    for rec in ['Thailand']:
         p = RecipientProfile(rec)
         p.save()

@@ -1,0 +1,236 @@
+AidDataID,orgname,orgiso3
+1,African Development Bank (AFDB),null
+5,Australia,AUS
+6,Austria,AUT
+7,Belgium,BEL
+8,Canada,CAN
+12,Denmark,DNK
+17,Finland,FIN
+18,France,FRA
+28,Italy,ITA
+29,Ireland,IRL
+30,Japan,JPN
+31,Luxembourg,LUX
+37,Netherlands,NLD
+38,New Zealand,NZL
+40,Norway,NOR
+43,Portugal,PRT
+45,Spain,ESP
+46,Sweden,SWE
+47,Switzerland,CHE
+51,United Kingdom,GBR
+52,United States,USA
+53,Germany,DEU
+60,Saudi Arabia,SAU
+61,Kuwait,KWT
+65,Qatar,QAT
+74,Greece,GRC
+75,Brazil,BRA
+76,Colombia,COL
+77,Estonia,EST
+78,Hungary,HUN
+79,Latvia,LVA
+80,Liechtenstein,LIE
+81,Lithuania,LTU
+83,Slovak Republic,SVK
+84,South Africa,ZAF
+85,Thailand,THA
+86,United Arab Emirates,ARE
+3250264,Chile,CHL
+3270662,Iceland,ISL
+3298046,Taiwan,TWN
+4653485,India,IND
+40497946,Korea,KOR
+40874767,Czech Republic,CZE
+50529105,Nigeria,NGA
+67524742,Egypt,EGY
+91605924,Romania,ROU
+91609235,Cyprus,CYP
+93521853,Slovenia,SVN
+110593422,Indonesia,IDN
+110593425,Central Emergency Relief Fund,
+110593431,Czechoslovakia,CZE
+110593434,Afghanistan,AFG
+110593435,Cayman Islands,CYM
+110593438,Central African Republic,CAF
+110593443,Gabon,GAB
+110593447,European Commission,
+110593449,Bermuda,BMU
+110593457,Aruba,ABW
+110593464,Bahamas,BHS
+110593465,Bahrain,BHR
+110593466,"Congo, Democratic Republic of",COD
+110593468,Bosnia-Herzegovina,BIH
+110593471,Brunei,BRN
+110593472,Bulgaria,BGR
+110593477,East African Community,
+110593478,Mongolia,MNG
+110593480,Falkland Islands,FLK
+110593481,Guinea,GIN
+110593484,French Guiana,GUF
+110593485,French Polynesia,PYF
+110593487,Global,
+110593491,Equatorial Guinea,GNQ
+110593493,Gibraltar,GIB
+110593495,Sri Lanka,LKA
+110593496,Guadeloupe,GLP
+110593497,Mozambique,MOZ
+110593498,Uzbekistan,UZB
+110593499,Turkmenistan,TKM
+110593501,"Hong Kong, China",HKG
+110593503,IFAD,
+110593508,Israel,ISR
+110593517,Mauritania,MRT
+110593519,Mauritius,MUS
+110593524,Mayotte,MYT
+110593525,Kyrgyz Republic,KGZ
+110593531,MADCT Unspecified,
+110593536,Macao,MAC
+110593537,Kazakhstan,KAZ
+110593538,Niger,NER
+110593539,Malta,MLT
+110593541,Martinique,MTQ
+110593542,Rwanda,RWA
+110593543,Oman,OMN
+110593548,Netherlands Antilles,ANT
+110593549,New Caledonia,NCL
+110593552,Northern Marianas,MNP
+110593558,Poland,POL
+110593561,Reunion,REU
+110593563,Russia,RUS
+110593568,Soviet Union,
+110593575,Serbia and Montenegro,
+110593576,Singapore,SGP
+110593582,St. Pierre & Miquelon,SPM
+110593589,Turks and Caicos Islands,TCA
+110593590,United Nations,
+110593603,Virgin Islands (UK),VGB
+110593613,Yugoslavia,
+110593614,Samoa,WSM
+110593615,Serbia,SRB
+110593616,Solomon Islands,SLB
+110593617,Wallis & Futuna,WLF
+110593618,Cote d`Ivoire,CIV
+110593619,Croatia,HRV
+110593620,Albania,ALB
+110593621,Belarus,BLR
+110593623,Algeria,DZA
+110593624,Fiji,FJI
+110593625,Cook Islands,COK
+110593626,Angola,AGO
+110593627,Botswana,BWA
+110593628,Burundi,BDI
+110593629,Cameroon,CMR
+110593630,Cape Verde,CPV
+110593631,Chad,TCD
+110593632,Comoros,COM
+110593633,Turkey,TUR
+110593634,Ukraine,UKR
+110593635,Jordan,JOR
+110593636,Iraq,IRQ
+110593637,Iran,IRN
+110593638,Namibia,NAM
+110593639,Peru,PER
+110593641,Montserrat,MSR
+110593642,Honduras,HND
+110593643,Jamaica,JAM
+110593644,Mexico,MEX
+110593645,Panama,PAN
+110593646,Lebanon,LBN
+110593647,Maldives,MDV
+110593649,Tuvalu,TUV
+110593650,Papua New Guinea,PNG
+110593651,Tonga,TON
+110593652,Niue,NIU
+110593653,Libya,LBY
+110593654,Morocco,MAR
+110593655,Nauru,NRU
+110593656,Philippines,PHL
+110593657,Malaysia,MYS
+110593658,Laos,LAO
+110593659,"Korea, Democratic Republic of",PRK
+110593660,Pakistan,PAK
+110593661,Nepal,NPL
+110593663,Kenya,KEN
+110593664,Lesotho,LSO
+110593665,Liberia,LBR
+110593666,Myanmar,MMR
+110593667,Madagascar,MDG
+110593668,Malawi,MWI
+110593669,Mali,MLI
+110593670,Tokelau,TKL
+110593671,"Congo, Republic of",COG
+110593672,China,CHN
+110593673,"Ex-Yugoslavian States, Unspecified",
+110593674,Cambodia,KHM
+110593675,Benin,BEN
+110593676,Vanuatu,VUT
+110593677,Ethiopia,ETH
+110593678,Gambia,GMB
+110593680,Bangladesh,BGD
+110593681,Ghana,GHA
+110593682,Tunisia,TUN
+110593683,Guinea-Bissau,GNB
+110593685,Nicaragua,NIC
+110593686,Zimbabwe,ZWE
+110593688,Sao Tome & Principe,STP
+110593689,Syria,SYR
+110593690,St. Lucia,LCA
+110593692,St. Kitts & Nevis,KNA
+110593693,Palestinian Adm. Areas,PSE
+110593695,Azerbaijan,AZE
+110593696,Sierra Leone,SLE
+110593699,Yemen,YEM
+110593700,Djibouti,DJI
+110593701,Trinidad & Tobago,TTO
+110593702,St. Helena,SHN
+110593703,Cuba,CUB
+110593704,Swaziland,SWZ
+110593705,Paraguay,PRY
+110593706,St.Vincent & Grenadines,VCT
+110593707,Guatemala,GTM
+110593708,Haiti,HTI
+110593709,Antigua & Barbuda,ATG
+110593710,Bhutan,BTN
+110593712,Georgia,GEO
+110593713,Armenia,ARM
+110593714,Eritrea,ERI
+110593716,Guyana,GUY
+110593717,Ecuador,ECU
+110593718,Burkina Faso,BFA
+110593721,Bolivia,BOL
+110593722,Barbados,BRB
+110593723,Argentina,ARG
+110593724,Costa Rica,CRI
+110593725,Dominican Republic,DOM
+110593726,El Salvador,SLV
+110593727,Grenada,GRD
+110593728,Dominica,DMA
+110593729,Belize,BLZ
+110593730,Anguilla,AIA
+110593732,Kosovo,XXK
+110593733,Montenegro,MNE
+110593734,"Macedonia, FYR",MKD
+110593735,Palau,PLW
+110593736,Moldova,MDA
+110593737,Marshall Islands,MHL
+110593738,Viet Nam,VNM
+110593739,Timor-Leste,TLS
+110593740,Zambia,ZMB
+110593742,Senegal,SEN
+110593744,"Micronesia, Federated States of",FSM
+110593745,Kiribati,KIR
+110593746,Tajikistan,TJK
+110593747,Seychelles,SYC
+110593748,Somalia,SOM
+110593750,Venezuela,VEN
+110593751,Uruguay,URY
+110593752,Sudan,SDN
+110593753,Suriname,SUR
+110593754,Tanzania,TZA
+110593755,Togo,TGO
+110593756,Uganda,UGA
+110593757,no value,null
+110593758,South Sudan,SSD
+112064757,ASDB Group,null
+112064771,WORLD BANK,

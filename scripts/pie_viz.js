@@ -6,6 +6,8 @@ var fetchRecipients = require('./fetch_recipients');
 var Promise = require('promise');
 var ProgressBar = require('progress');
 
+var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
+
 fetchRecipients()
   .then(generateRandomPieData)
   .then(writeChartsToDisk)
@@ -64,7 +66,7 @@ function writeChart(i) {
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
-    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
+    src: [ d3lib ],
     done: function(err, window) {
       if (err) return;
       var svg = getChart(window, allData[p.idx].donors[p.group]);

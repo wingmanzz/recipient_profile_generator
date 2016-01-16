@@ -5,6 +5,8 @@ var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
 var ProgressBar = require('progress');
 
+var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
+
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
@@ -12,7 +14,7 @@ var bar = new ProgressBar('Generating double bar charts [:bar] :percent', { tota
 
 for (var idx = 0; idx < recipientData.length; idx++) {
   var rec = recipientData[idx];
-  var recipient = { aiddataId: rec['AidDataID'] };
+  var recipient = { orgname: rec['orgname'] };
   var grouped = Object.keys(rec)
     .filter(function(key) {
       return key.indexOf('_PD') > -1;
@@ -43,13 +45,13 @@ function writeChartToDisk(data) {
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
-    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
+    src: [ d3lib ],
     done: function(err, window) {
       if (err) return;
       var svg = getChart(window, data.top5);
       fs.writeFileSync(
         path.join(__dirname, '..', 'graphics', 'double_bar_chart_' +
-            data.aiddataId.replace(/ /g, '_') + '.svg'),
+            data.orgname.replace(/ /g, '_') + '.svg'),
         xmlserializer.serializeToString(svg),
         { encoding: 'utf-8' }
       );

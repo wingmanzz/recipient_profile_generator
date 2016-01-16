@@ -6,6 +6,8 @@ var Promise = require('promise');
 var ProgressBar = require('progress');
 var R = require('ramda');
 
+var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
+
 parseData()
   .then(writeChartsToDisk)
   .catch(function(err) { console.log(err); });
@@ -75,7 +77,7 @@ function writeChart(i) {
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
-    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
+    src: [ d3lib ],
     done: function(err, window) {
       if (err) return;
       var svg = getChart(window, d.data.donors);

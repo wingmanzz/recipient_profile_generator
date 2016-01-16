@@ -5,6 +5,8 @@ var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
 var ProgressBar = require('progress');
 
+var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
+
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
@@ -24,7 +26,7 @@ for (var idx = 0; idx < recipientData.length; idx++) {
   });
 
   writeChartToDisk({
-    recipient: recipientData[idx]['AidDataID'],
+    recipient: recipientData[idx]['orgname'],
     q21s: q21s
   });
 }
@@ -34,16 +36,22 @@ function writeChartToDisk(data, i) {
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
-    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
+    src: [d3lib],
     done: function(err, window) {
-      if (err) return;
-      var svg = getChart(window, data.q21s);
-      fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'spider_chart_' +
-            data.recipient.replace(/ /g, '_') + '.svg'),
-        xmlserializer.serializeToString(svg),
-        { encoding: 'utf-8' }
-      );
+      if (!err)
+      {
+		  var svg = getChart(window, data.q21s);
+		  fs.writeFileSync(
+			path.join(__dirname, '..', 'graphics', 'spider_chart_' +
+				data.recipient.replace(/ /g, '_') + '.svg'),
+			xmlserializer.serializeToString(svg),
+			{ encoding: 'utf-8' }
+		  );
+	  }
+	  else
+	  {
+	  	console.log("skipping: "+data.recipient);
+	  }
       bar.tick();
     }
   });

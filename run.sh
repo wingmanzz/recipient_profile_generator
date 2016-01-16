@@ -11,6 +11,6 @@ done
 
 parallel --verbose --timeout 30 \
     'node_modules/.bin/svgexport '$dir'/graphics/{} '$dir'/charts/`echo $(basename {}) \
-    | sed s/svg$/png/` 100% 4x' ::: $(ls $dir/graphics);
+    | sed s/svg$/png/` 100% 2x' ::: $(ls $dir/graphics);
 
 python $dir/recipient_profile_gen.py

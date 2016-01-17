@@ -133,7 +133,7 @@ function getChart(window, data) {
     .enter().append('text')
       .attr('x', function(d, i) { return Math.cos((2 * PI / n) * i - PI / 2) * 200 + (w / 2); })
       .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + (h / 2); })
-      .text(function(d) { return d.type; });
+      .text(function(d) { console.log(d.type);return d.type; });
 
   svg.append('g')
     .append('text')

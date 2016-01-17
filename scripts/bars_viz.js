@@ -31,7 +31,9 @@ function parseData() {
           var ranks = r.rankings[q].map(function(donor) {
             return {
               donor: donor['Donor_ID'],
-              amount: +donor.estimate
+              amount: +donor.estimate,
+              fill: '#fff',
+              rank: 0
             };
           });
           return {
@@ -49,6 +51,12 @@ function sort(arr) {
     return a.amount - b.amount;
   }, arr);
   var sorted = [];
+  arr[0].rank = 3;
+  arr[0].fill = '#fff';
+  arr[1].rank = 2;
+  arr[1].fill = '#fff';
+  arr[2].rank = 1;
+  arr[2].fill = '#000';
   sorted.push(arr[1]);
   sorted.push(arr[2]);
   sorted.push(arr[0]);
@@ -128,17 +136,42 @@ function getChart(window, data) {
       .attr('height', function(d) { return y(d.amount); })
       .attr('fill', function(d, i) { return colors[i]; });
 
-  var labels = svg.append('g');
-  labels.selectAll('text')
+  var labels1 = svg.append('g');
+  labels1.selectAll('text')
     .data(data)
     .enter().append('text')
-      .text(function(d) { return d.donor + ' - ' + Math.round(d.amount * 100) / 100; })
-        .attr('x', function(d) { return x(d.donor) + 30; })
-        .attr('y', function(d) { return h - y(d.amount) + 20; });
+      .text(function(d) { return d.rank;})
+        .attr('x', function(d) { return x(d.donor) + (barWidth/2); })
+        .attr('fill', function(d) { return d.fill; })
+        .attr('font-family', 'Open Sans Bold')
+        .attr('font-size', '24')
+        .attr('y', function(d) { return h - y(d.amount) + 40; });
+   
+  var labels2 = svg.append('g');
+  labels2.selectAll('text')
+    .data(data)
+    .enter().append('text')
+      .text(function(d) { return d.donor; })
+        .attr('x', function(d) { return x(d.donor) + (barWidth/2); })
+        .attr('fill', function(d) { return d.fill; })
+        .attr('font-family', 'Open Sans')
+         .attr('font-size', '16')
+        .attr('y', function(d) { return h - y(d.amount) + 70; });
+        
+  var labels3 = svg.append('g');
+  labels3.selectAll('text')
+    .data(data)
+    .enter().append('text')
+      .text(function(d) { return '('+ Math.round(d.amount * 100) / 100 +')'; })
+        .attr('x', function(d) { return x(d.donor) + (barWidth/2); })
+        .attr('fill', function(d) { return d.fill; })
+        .attr('font-family', 'Open Sans')
+         .attr('font-size', '16')
+        .attr('y', function(d) { return h - y(d.amount) + 90; });
 
   d3.selectAll('text')
-    .style('fill', '#fff')
-    .style('font-family', 'Open Sans')
+    //.style('fill', '#fff')
+    //.style('font-family', 'Open Sans');
     .style('text-anchor', 'middle');
 
 

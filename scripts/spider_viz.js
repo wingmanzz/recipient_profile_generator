@@ -9,6 +9,9 @@ var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
 
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
+    
+var nameMappings = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'parsed_data', 'q_mapping.json'), { encoding: 'utf-8' }));
 
 var bar = new ProgressBar('Generating spider chart [:bar] :percent', { total: recipientData.length });
 
@@ -16,9 +19,15 @@ for (var idx = 0; idx < recipientData.length; idx++) {
   var q21s = Object.keys(recipientData[idx]).filter(function(key) {
     return key.indexOf('Q21_PT') > -1;
   }).map(function(key) {
+  
+  	var nameFound = nameMappings.filter(function(item) {
+    	return item.id == key;
+	});
     return {
       type: key,
-      score: +recipientData[idx][key]
+      score: +recipientData[idx][key],
+      name: nameFound[0].shorttext,
+      indicator: nameFound[0].indicator,
     };
   });
   q21s.sort(function(a, b) {
@@ -71,7 +80,7 @@ function getChart(window, data) {
   var COLOR = '#161f34';
 
   var CENTER_CIRCLE_RADIUS = 100;
-  var CHILD_RADIUS = 30;
+  var CHILD_RADIUS = 37;
 
   var svg = d3.select('body').append('svg')
     .attr('width', w)
@@ -133,7 +142,7 @@ function getChart(window, data) {
     .enter().append('text')
       .attr('x', function(d, i) { return Math.cos((2 * PI / n) * i - PI / 2) * 200 + (w / 2); })
       .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + (h / 2); })
-      .text(function(d) { console.log(d.type);return d.type; });
+      .text(function(d) {return d.name; });
 
   svg.append('g')
     .append('text')

@@ -187,7 +187,7 @@ function getChart(window, _data) {
     .enter().append('rect')
       .attr('class', 'bar left')
       .attr('x', 0)
-      .attr('y', function(d) { return yScale(d.domainname) + 10; })
+      .attr('y', function(d) { return yScale(d.domainname) + 25; })
       .attr('width', function(d) { return xScale(d.data.Q14); })
       .attr('height', '30px')
       .attr('fill', '#92b5d8');
@@ -197,7 +197,7 @@ function getChart(window, _data) {
     .enter().append('rect')
       .attr('class', 'bar right')
       .attr('x', 0)
-      .attr('y', function(d) { return yScale(d.domainname) + 10; })
+      .attr('y', function(d) { return yScale(d.domainname) + 25; })
       .attr('width', function(d) { return xScale(d.data.Q21); })
       .attr('height', '30px')
       .attr('fill', '#161f34');
@@ -210,7 +210,7 @@ function getChart(window, _data) {
     .append('text')
       .text(function(d) { return Math.round(d.data.Q14 * 100) / 100; })
         .attr('x', function(d) { return (w / 2) - xScale(d.data.Q14) - margin.middle - 40; })
-        .attr('y', function(d) { return yScale(d.domainname) + 30; });
+        .attr('y', function(d) { return yScale(d.domainname) + 45; });
 
   svg.append('g')
     .selectAll('text')
@@ -219,7 +219,40 @@ function getChart(window, _data) {
     .append('text')
       .text(function(d) { return Math.round(d.data.Q21 * 100) / 100; })
         .attr('x', function(d) { return (w / 2) + margin.middle + xScale(d.data.Q21) + 15; })
-        .attr('y', function(d) { return yScale(d.domainname) + 30; });
+        .attr('y', function(d) { return yScale(d.domainname) + 45; });
+        
+   // domain ODA labels
+  svg.append('g')
+    .selectAll('text')
+    .data(_data)
+    .enter()
+    .append('text')
+      .text(function(d) { return "Domain-Specific"; })
+        .attr('text-decoration', 'underline')
+        .attr('x', 242)
+        .attr('y', function(d) { return yScale(d.domainname) + 40; });
+
+  svg.append('g')
+    .selectAll('text')
+    .data(_data)
+    .enter()
+    .append('text')
+      .text( function(d) { return "ODA:"; })
+        .attr('text-decoration', 'underline')
+        .attr('x', 227)
+        .attr('y', function(d) { return yScale(d.domainname) + 48; });
+  
+  //ODA figures
+   svg.append('g')
+    .selectAll('text')
+    .data(_data)
+    .enter()
+    .append('text')
+      .text( function(d) { return "xxx million USD"; })
+        .attr('x', 251)
+        .attr('y', function(d) { return yScale(d.domainname) + 48; });
+        
+    
 
 
   // styling

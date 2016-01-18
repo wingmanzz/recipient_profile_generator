@@ -19,7 +19,7 @@ function generateRandomPieData(data) {
   return new Promise(function(resolve) {
     resolve(recipients.map(function(d) {
       function getData() {
-        return [ 1, 2, 3, 4, 5, 6 ].map(function(i) {
+        return [ 1, 2, 3, 4, 5 ].map(function(i) {
           return {
             donor: d.name + ' donor ' + i,
             amount: Math.random()

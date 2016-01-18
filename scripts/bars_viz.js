@@ -166,7 +166,7 @@ function getChart(window, data) {
         .attr('x', function(d) { return x(d.donor) + (barWidth/2); })
         .attr('fill', function(d) { return d.fill; })
         .attr('font-family', 'Open Sans')
-         .attr('font-size', '16')
+        .attr('font-size', '16')
         .attr('y', function(d) { return h - y(d.amount) + 90; });
 
   d3.selectAll('text')

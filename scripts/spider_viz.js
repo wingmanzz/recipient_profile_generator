@@ -27,7 +27,7 @@ for (var idx = 0; idx < recipientData.length; idx++) {
       type: key,
       score: +recipientData[idx][key],
       name: nameFound[0].shorttext,
-      indicator: nameFound[0].indicator,
+      indicator: nameFound[0].indicator
     };
   });
   q21s.sort(function(a, b) {
@@ -141,7 +141,16 @@ function getChart(window, data) {
       .data(data)
     .enter().append('text')
       .attr('x', function(d, i) { return Math.cos((2 * PI / n) * i - PI / 2) * 200 + (w / 2); })
-      .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + (h / 2); })
+      .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + ((h / 2) - 10); })
+      .attr('font-size', '20')
+      .text(function(d,i) {return i+1; });
+      
+  svg.append('g').selectAll('.label')
+      .data(data)
+    .enter().append('text')
+      .attr('x', function(d, i) { return Math.cos((2 * PI / n) * i - PI / 2) * 200 + (w / 2); })
+      .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + ((h / 2) + 5); })
+      .attr('font-size', '8')
       .text(function(d) {return d.name; });
 
   svg.append('g')

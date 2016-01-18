@@ -10,6 +10,9 @@ var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
 
+var nameMappings = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'parsed_data', 'q_mapping.json'), { encoding: 'utf-8' }));
+
 var bar = new ProgressBar('Generating double bar charts [:bar] :percent', { total: recipientData.length });
 
 for (var idx = 0; idx < recipientData.length; idx++) {
@@ -28,10 +31,18 @@ for (var idx = 0; idx < recipientData.length; idx++) {
       return out;
     }, {});
 
+    	
   grouped = Object.keys(grouped).map(function(domain) {
+  
+  	var nameFound = nameMappings.filter(function(item) {
+  		var type = item.id.split('_')[1];
+  		return type == domain;
+    	});
+    	
     return {
       domain: domain,
-      data: grouped[domain]
+      data: grouped[domain],
+      domainname: nameFound[0].shorttext
     };
   });
 
@@ -71,8 +82,7 @@ function getChart(window, _data) {
     bottom: 10 * PX_RATIO,
     left: 20 * PX_RATIO,
     middle: _data.reduce(function(p, c) {
-      if (c.domain.length > p) p = c.domain.length;
-      return p;
+      return 10;
     }, 0) * 5 * PX_RATIO
   };
 
@@ -112,7 +122,7 @@ function getChart(window, _data) {
     .nice();
 
   var yScale = d3.scale.ordinal()
-    .domain(_data.map(function(d) { return d.domain; }))
+    .domain(_data.map(function(d) { return d.domainname; }))
     .rangeRoundBands([h, 0], 0.1);
 
 
@@ -177,7 +187,7 @@ function getChart(window, _data) {
     .enter().append('rect')
       .attr('class', 'bar left')
       .attr('x', 0)
-      .attr('y', function(d) { return yScale(d.domain) + 10; })
+      .attr('y', function(d) { return yScale(d.domainname) + 10; })
       .attr('width', function(d) { return xScale(d.data.Q14); })
       .attr('height', '30px')
       .attr('fill', '#92b5d8');
@@ -187,7 +197,7 @@ function getChart(window, _data) {
     .enter().append('rect')
       .attr('class', 'bar right')
       .attr('x', 0)
-      .attr('y', function(d) { return yScale(d.domain) + 10; })
+      .attr('y', function(d) { return yScale(d.domainname) + 10; })
       .attr('width', function(d) { return xScale(d.data.Q21); })
       .attr('height', '30px')
       .attr('fill', '#161f34');
@@ -200,7 +210,7 @@ function getChart(window, _data) {
     .append('text')
       .text(function(d) { return Math.round(d.data.Q14 * 100) / 100; })
         .attr('x', function(d) { return (w / 2) - xScale(d.data.Q14) - margin.middle - 40; })
-        .attr('y', function(d) { return yScale(d.domain) + 30; });
+        .attr('y', function(d) { return yScale(d.domainname) + 30; });
 
   svg.append('g')
     .selectAll('text')
@@ -209,7 +219,7 @@ function getChart(window, _data) {
     .append('text')
       .text(function(d) { return Math.round(d.data.Q21 * 100) / 100; })
         .attr('x', function(d) { return (w / 2) + margin.middle + xScale(d.data.Q21) + 15; })
-        .attr('y', function(d) { return yScale(d.domain) + 30; });
+        .attr('y', function(d) { return yScale(d.domainname) + 30; });
 
 
   // styling
@@ -221,6 +231,7 @@ function getChart(window, _data) {
   svg.selectAll('text')
     .style('fill', '#000')
     .style('font-family', 'Open Sans')
+    .style('font-size', '8')
     .style('stroke', 'none');
 
   svg.selectAll('line')

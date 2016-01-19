@@ -20,6 +20,7 @@
     "svgexport": "^0.2.4",
     "unzip": "^0.1.11",
     "xmlserializer": "^0.3.3",
-    "xtend": "^4.0.0"
+    "xtend": "^4.0.0",
+    "sync-request": "^2.8.4"
   }
 }

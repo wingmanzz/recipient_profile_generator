@@ -48,8 +48,9 @@ function parse_file(file_name,out_file)
 	}
 }
 
-parse_file('DP_Profiles_Raw_Data_CNTR_DATA_TEAM.csv','data.json')
-parse_file('q_name_mapping.csv','q_mapping.json')
+parse_file('DP_Profiles_Raw_Data_CNTR_DATA_TEAM.csv','data.json');
+parse_file('q_name_mapping.csv','q_mapping.json');
+parse_file('donor_org.csv','donor_org.json');
 
 
 function read(fname) {

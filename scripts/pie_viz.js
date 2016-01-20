@@ -113,7 +113,12 @@ function getChart(window, data) {
     .attr('d', arc)
     .style('fill', function(d) { return color(d.data.amount); });
 
-  g.append('text')
+  // a separate text only pie chart to overcome label clipping
+  var gt = svg.selectAll('arc')
+      .data(pie(data))
+    .enter().append('g')
+      .attr('class', 'arc');
+  gt.append('text')
     .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
     .attr('dy', '.35em')
     .style('text-anchor', 'middle')

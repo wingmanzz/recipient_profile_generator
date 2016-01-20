@@ -27,9 +27,9 @@ function findDonor(cw, oid)
 {
 	if (oid == -1)
 		return ("Other");
-	for (var i = 0; i < cw.hits.length; i++) 
+	for (var i = 0; i < cw.hits.length; i++)
 	{
-		if (cw.hits[i]['id'] == oid) 
+		if (cw.hits[i]['id'] == oid)
 		{
 			return cw.hits[i]['name']
 		}
@@ -37,10 +37,10 @@ function findDonor(cw, oid)
 	return -1
 }
 function getODAById (rcvId, type)
-{	
+{
 	var alloda= [];
-    
-    
+
+
     console.log("Getting Top ODA for: "+rcvId,type);
 	var url = 'http://api.aiddata.org/flows/origin?ro='+rcvId+'&y=2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013';
 	var res = request('GET', url);
@@ -50,11 +50,11 @@ function getODAById (rcvId, type)
 		var oda = {id: oda_json.items[i].source._id,
 			type:'None',
 			oda: oda_json.items[i].total};
-			
+
 		// find type (dac/nondac etc)
-		for (var x=0; x<orgtype.length; x++) 
+		for (var x=0; x<orgtype.length; x++)
 		{
-			if (orgtype[x].id == oda.id && orgtype[x].type == type) 
+			if (orgtype[x].id == oda.id && orgtype[x].type == type)
 			{
 				oda.type = orgtype[x].type;
 				alloda.push(oda)
@@ -71,14 +71,14 @@ function generatePieData(data) {
     resolve(recipients.map(function(d) {
       function getData(type) {
       	oda = getODAById(d.id, type);
-      	
+
       	var other = {id:-1, oda:0};
       	for (v = 5; v < oda.length; v++)
       	{
       		other.oda = other.oda + oda[v].oda;
       	}
-      
-      	function order(a, b) { return b.amount - a.amount; } 
+
+      	function order(a, b) { return b.amount - a.amount; }
   		oda = R.take(5, R.sort(order, oda));
   		if (other.oda > 0)
   			oda.push(other)
@@ -197,13 +197,14 @@ function getChart(window, data) {
       .data(pie(data))
     .enter().append('g')
       .attr('class', 'arc');
+
   gt.append('text')
     .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
     .attr('dy', '.35em')
     .style('text-anchor', 'middle')
     .text(function(d) { return d.data.donor; });
-    
-    g.append('text')
+
+  gt.append('text')
     .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
     .attr('dy', '25px')
     .style('text-anchor', 'middle')

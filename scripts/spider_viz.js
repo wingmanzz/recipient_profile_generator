@@ -5,8 +5,13 @@ var jsdom = require('jsdom');
 var xmlserializer = require('xmlserializer');
 var ProgressBar = require('progress');
 
+var d3lib = fs.readFileSync('scripts/d3.min.js').toString();
+
 var recipientData = JSON.parse(
     fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
+    
+var nameMappings = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'parsed_data', 'q_mapping.json'), { encoding: 'utf-8' }));
 
 var bar = new ProgressBar('Generating spider chart [:bar] :percent', { total: recipientData.length });
 
@@ -14,9 +19,15 @@ for (var idx = 0; idx < recipientData.length; idx++) {
   var q21s = Object.keys(recipientData[idx]).filter(function(key) {
     return key.indexOf('Q21_PT') > -1;
   }).map(function(key) {
+  
+  	var nameFound = nameMappings.filter(function(item) {
+    	return item.id == key;
+	});
     return {
       type: key,
-      score: +recipientData[idx][key]
+      score: +recipientData[idx][key],
+      name: nameFound[0].shorttext,
+      indicator: nameFound[0].indicator
     };
   });
   q21s.sort(function(a, b) {
@@ -24,7 +35,7 @@ for (var idx = 0; idx < recipientData.length; idx++) {
   });
 
   writeChartToDisk({
-    recipient: recipientData[idx]['AidDataID'],
+    recipient: recipientData[idx]['orgname'],
     q21s: q21s
   });
 }
@@ -34,16 +45,22 @@ function writeChartToDisk(data, i) {
   jsdom.env({
     features: { QuerySelector: true },
     html: '<!DOCTYPE html>',
-    scripts: [ 'http://d3js.org/d3.v3.min.js' ],
+    src: [d3lib],
     done: function(err, window) {
-      if (err) return;
-      var svg = getChart(window, data.q21s);
-      fs.writeFileSync(
-        path.join(__dirname, '..', 'graphics', 'spider_chart_' +
-            data.recipient.replace(/ /g, '_') + '.svg'),
-        xmlserializer.serializeToString(svg),
-        { encoding: 'utf-8' }
-      );
+      if (!err)
+      {
+		  var svg = getChart(window, data.q21s);
+		  fs.writeFileSync(
+			path.join(__dirname, '..', 'graphics', 'spider_chart_' +
+				data.recipient.replace(/ /g, '_') + '.svg'),
+			xmlserializer.serializeToString(svg),
+			{ encoding: 'utf-8' }
+		  );
+	  }
+	  else
+	  {
+	  	console.log("skipping: "+data.recipient);
+	  }
       bar.tick();
     }
   });
@@ -63,7 +80,7 @@ function getChart(window, data) {
   var COLOR = '#161f34';
 
   var CENTER_CIRCLE_RADIUS = 100;
-  var CHILD_RADIUS = 30;
+  var CHILD_RADIUS = 37;
 
   var svg = d3.select('body').append('svg')
     .attr('width', w)
@@ -124,8 +141,17 @@ function getChart(window, data) {
       .data(data)
     .enter().append('text')
       .attr('x', function(d, i) { return Math.cos((2 * PI / n) * i - PI / 2) * 200 + (w / 2); })
-      .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + (h / 2); })
-      .text(function(d) { return d.type; });
+      .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + ((h / 2) - 10); })
+      .attr('font-size', '20')
+      .text(function(d,i) {return i+1; });
+      
+  svg.append('g').selectAll('.label')
+      .data(data)
+    .enter().append('text')
+      .attr('x', function(d, i) { return Math.cos((2 * PI / n) * i - PI / 2) * 200 + (w / 2); })
+      .attr('y', function(d, i) { return Math.sin((2 * PI / n) * i - PI / 2) * 200 + ((h / 2) + 5); })
+      .attr('font-size', '8')
+      .text(function(d) {return d.name; });
 
   svg.append('g')
     .append('text')

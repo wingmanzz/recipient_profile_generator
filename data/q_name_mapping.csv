@@ -1,0 +1,89 @@
+id,shorttext,indicator
+Q14_PD1,Macroeconomic Management ,Usefulness of Advice
+Q14_PD2,"Finance, Credit, and Banking",Usefulness of Advice
+Q14_PD3,Trade,Usefulness of Advice
+Q14_PD4,Business Regulatory Environment,Usefulness of Advice
+Q14_PD5,Investment,Usefulness of Advice
+Q14_PD6,Health,Usefulness of Advice
+Q14_PD7,Education,Usefulness of Advice
+Q14_PD8,Family and Gender,Usefulness of Advice
+Q14_PD9,Social Protection and Welfare,Usefulness of Advice
+Q14_PD10,Labor,Usefulness of Advice
+Q14_PD11,Environmental Protection,Usefulness of Advice
+Q14_PD12,Agriculture and Rural Development,Usefulness of Advice
+Q14_PD13,Energy and Mining,Usefulness of Advice
+Q14_PD14,Land,Usefulness of Advice
+Q14_PD15,Infrastructure,Usefulness of Advice
+Q14_PD16,Decentralization,Usefulness of Advice
+Q14_PD17,Anti-Corruption and Transparency,Usefulness of Advice
+Q14_PD18,Democracy,Usefulness of Advice
+Q14_PD19,Civil Service,Usefulness of Advice
+Q14_PD20,Justice and Security,Usefulness of Advice
+Q14_PD21,Tax,Usefulness of Advice
+Q14_PD22,Customs,Usefulness of Advice
+Q14_PD23,Public Expenditure Management,Usefulness of Advice
+Q14_PD24,Foreign policy,Usefulness of Advice
+Q21_PD1,Macroeconomic Management ,Agenda-Setting Influence
+Q21_PD2,"Finance, Credit, and Banking",Agenda-Setting Influence
+Q21_PD3,Trade,Agenda-Setting Influence
+Q21_PD4,Business Regulatory Environment,Agenda-Setting Influence
+Q21_PD5,Investment,Agenda-Setting Influence
+Q21_PD6,Health,Agenda-Setting Influence
+Q21_PD7,Education,Agenda-Setting Influence
+Q21_PD8,Family and Gender,Agenda-Setting Influence
+Q21_PD9,Social Protection and Welfare,Agenda-Setting Influence
+Q21_PD10,Labor,Agenda-Setting Influence
+Q21_PD11,Environmental Protection,Agenda-Setting Influence
+Q21_PD12,Agriculture and Rural Development,Agenda-Setting Influence
+Q21_PD13,Energy and Mining,Agenda-Setting Influence
+Q21_PD14,Land,Agenda-Setting Influence
+Q21_PD15,Infrastructure,Agenda-Setting Influence
+Q21_PD16,Decentralization,Agenda-Setting Influence
+Q21_PD17,Anti-Corruption and Transparency,Agenda-Setting Influence
+Q21_PD18,Democracy,Agenda-Setting Influence
+Q21_PD19,Civil Service,Agenda-Setting Influence
+Q21_PD20,Justice and Security,Agenda-Setting Influence
+Q21_PD21,Tax,Agenda-Setting Influence
+Q21_PD22,Customs,Agenda-Setting Influence
+Q21_PD23,Public Expenditure Management,Agenda-Setting Influence
+Q21_PD24,Foreign policy,Agenda-Setting Influence
+Q25_PD1,Macroeconomic Management ,Helpfulness in Implementation
+Q25_PD2,"Finance, Credit, and Banking",Helpfulness in Implementation
+Q25_PD3,Trade,Helpfulness in Implementation
+Q25_PD4,Business Regulatory Environment,Helpfulness in Implementation
+Q25_PD5,Investment,Helpfulness in Implementation
+Q25_PD6,Health,Helpfulness in Implementation
+Q25_PD7,Education,Helpfulness in Implementation
+Q25_PD8,Family and Gender,Helpfulness in Implementation
+Q25_PD9,Social Protection and Welfare,Helpfulness in Implementation
+Q25_PD10,Labor,Helpfulness in Implementation
+Q25_PD11,Environmental Protection,Helpfulness in Implementation
+Q25_PD12,Agriculture and Rural Development,Helpfulness in Implementation
+Q25_PD13,Energy and Mining,Helpfulness in Implementation
+Q25_PD14,Land,Helpfulness in Implementation
+Q25_PD15,Infrastructure,Helpfulness in Implementation
+Q25_PD16,Decentralization,Helpfulness in Implementation
+Q25_PD17,Anti-Corruption and Transparency,Helpfulness in Implementation
+Q25_PD18,Democracy,Helpfulness in Implementation
+Q25_PD19,Civil Service,Helpfulness in Implementation
+Q25_PD20,Justice and Security,Helpfulness in Implementation
+Q25_PD21,Tax,Helpfulness in Implementation
+Q25_PD22,Customs,Helpfulness in Implementation
+Q25_PD23,Public Expenditure Management,Helpfulness in Implementation
+Q25_PD24,Foreign policy,Helpfulness in Implementation
+Q21_PT1,Service Delivery,Agenda-Setting Influence
+Q21_PT2,De Jure Environment,Agenda-Setting Influence
+Q21_PT3,Implementation,Agenda-Setting Influence
+Q21_PT4,Information,Agenda-Setting Influence
+Q21_PT5,Corruption,Agenda-Setting Influence
+Q21_PT6,Informality,Agenda-Setting Influence
+Q21_PT7,Funding,Agenda-Setting Influence
+Q21_PT8,Human Capital,Agenda-Setting Influence
+Q21_PT9,Infrastructure,Agenda-Setting Influence
+Q21_PT10,Bureaucracy,Agenda-Setting Influence
+Q21_PT11,Coordination,Agenda-Setting Influence
+Q21_PT12,Leadership,Agenda-Setting Influence
+Q21_PT13,Vested Interests,Agenda-Setting Influence
+Q21_PT14,Consultation,Agenda-Setting Influence
+Q21_PT15,Physical Security,Agenda-Setting Influence
+Q21_PT16,Incentives,Agenda-Setting Influence

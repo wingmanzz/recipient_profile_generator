@@ -15,6 +15,10 @@ var donorcw = JSON.parse(fs.readFileSync(
 
 var orgtype = JSON.parse(fs.readFileSync(
       path.join(__dirname, 'parsed_data', 'donor_org.json'), { encoding: 'utf-8' }));
+      
+var recipientData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'parsed_data', 'data.json'), { encoding: 'utf-8' }));
+
 
 
 fetchRecipients()
@@ -34,8 +38,23 @@ function findDonor(cw, oid)
 			return cw.hits[i]['name']
 		}
 	}
-	return -1
+	return -1;
 }
+
+function findRcp(cw, oid)
+{
+	if (oid == -1)
+		return ("Other");
+	for (var i = 0; i < cw.length; i++) 
+	{
+		if (cw[i]['AidDataID'] == oid) 
+		{
+			return cw[i]['orgname']
+		}
+	}
+	return "xx";
+}
+
 function getODAById (rcvId, type)
 {	
 	var alloda= [];
@@ -90,7 +109,7 @@ function generatePieData(data) {
         });
       }
       return {
-        recipient: d.name,
+        recipient: findRcp(recipientData, d.id),
         donors: {
           dac: getData('DAC'),
           multi: getData('Multilateral'),
@@ -133,6 +152,7 @@ function writeChart(i) {
     done: function(err, window) {
       if (err) return;
       var svg = getChart(window, allData[p.idx].donors[p.group]);
+      
       fs.writeFileSync(
         path.join(__dirname, '..', 'graphics', 'pie_chart_' +
           p.recipient.replace(/ /g, '_') + '_' + p.group + '.svg'),

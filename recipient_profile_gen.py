@@ -7,6 +7,8 @@ from reportlab.lib.utils import ImageReader
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.pdfbase.pdfmetrics import stringWidth
+import json
+import string
 
 
 
@@ -415,6 +417,11 @@ class RecipientProfile:
         return self
 
 if __name__ == '__main__':
-    for rec in ['Thailand']:
-        p = RecipientProfile(rec)
-        p.save()
+    with open('scripts/parsed_data/data.json') as data_file:    
+        data = json.load(data_file)
+        for i in data:
+            p = RecipientProfile(string.replace(i["orgname"]," ","_"))
+            p.save()
+    #for rec in ['Thailand']:
+     #   p = RecipientProfile(rec)
+     #   p.save()

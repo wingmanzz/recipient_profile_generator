@@ -291,7 +291,7 @@
         },
         {
             "id": 40187914,
-            "name": "Congo, Republic of",
+            "name": "Republic of Congo",
             "iso2": "CG",
             "parent_agency_id": 110593687
         },
@@ -309,7 +309,7 @@
         },
         {
             "id": 142295940,
-            "name": "Congo, Democratic Republic of",
+            "name": "DRC",
             "iso2": "CD",
             "parent_agency_id": 110593687
         },

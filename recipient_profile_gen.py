@@ -9,6 +9,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.pdfbase.pdfmetrics import stringWidth
 import json
 import string
+import os.path
 
 
 
@@ -177,6 +178,9 @@ class RecipientProfile:
 
         # draw chart
         chart = 'charts/pie_chart_' + self.rec + '_dac.png'
+        if(os.path.isfile(chart) == False):
+            print "Missing: "+chart
+            chart = 'assets/images/empty.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['pie_width'], self.chart['pie_height'], mask='auto')
 
@@ -201,6 +205,9 @@ class RecipientProfile:
         p.drawOn(self.c, title_x, title_y)
 
         chart = 'charts/pie_chart_' + self.rec + '_nondac.png'
+        if(os.path.isfile(chart) == False):
+            print "Missing: "+chart
+            chart = 'assets/images/empty.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['pie_width'], self.chart['pie_height'], mask='auto')
 
@@ -226,6 +233,9 @@ class RecipientProfile:
 
         # draw chart
         chart = 'charts/pie_chart_' + self.rec + '_multi.png'
+        if(os.path.isfile(chart) == False):
+            print "Missing: "+chart
+            chart = 'assets/images/empty.png'
         self.c.drawImage(chart, chart_x, chart_y, \
                 self.chart['pie_width'], self.chart['pie_height'], mask='auto')
         return self

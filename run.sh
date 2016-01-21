@@ -14,3 +14,4 @@ parallel --verbose --timeout 30 \
     | sed s/svg$/png/` 100% 2x' ::: $(ls $dir/graphics);
 
 python $dir/recipient_profile_gen.py
+mv *.pdf profiles

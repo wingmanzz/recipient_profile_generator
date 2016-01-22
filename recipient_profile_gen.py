@@ -407,9 +407,10 @@ class RecipientProfile:
          
         datastr2 = "<font color='white' fontName='Open Sans' size=7><b>Financial Data Availability</b><br/></font> \
         <font color='white' fontName='Open Sans' size=6>Source: AidData Core Database, 2004-2013<br/> \
-        Number of Recipients:12<br/> \
+        Number of Development Partners:12<br/> \
         Total Projects: 245<br/> \
-        Total Commitments (USD 2011): $21.3 million<br/></font>"
+        Total Commitments (USD 2011): $24 million<br/> \
+        Total Disbursements (USD 2011): $21.3 million<br/></font>"
     
     	pData1 = Paragraph(datastr1, style)
         pData1.wrapOn(self.c, 150, 400)
